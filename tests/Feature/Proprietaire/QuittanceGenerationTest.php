@@ -51,7 +51,10 @@ test('proprietaire can generate a quittance pdf from a successful paiement', fun
     expect($pdfContent)
         ->toStartWith('%PDF-1.4')
         ->toContain('/Encoding /WinAnsiEncoding')
-        ->toContain(iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', 'Lomé'));
+        ->toContain(iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', 'Lomé'))
+        ->toContain(iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', 'Période'))
+        ->toContain(iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', 'PROPRIÉTAIRE'))
+        ->toContain(iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', 'Paiement simulé - aucune transaction réelle n\'a été effectuée.'));
 
     $response->assertRedirect(route('proprietaire.paiements.show', $paiement));
 });
