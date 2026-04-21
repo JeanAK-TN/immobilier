@@ -1,4 +1,8 @@
 <x-guest-layout>
+    <div class="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+        {{ __('Cette inscription crée un compte propriétaire. Les comptes locataires sont ensuite créés depuis l\'espace propriétaire.') }}
+    </div>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -41,11 +45,11 @@
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Déjà inscrit ?') }}
+                {{ __('Déjà un compte ?') }}
             </a>
 
             <x-primary-button class="ms-4">
-                {{ __('S\'inscrire') }}
+                {{ __('Créer mon compte') }}
             </x-primary-button>
         </div>
     </form>
