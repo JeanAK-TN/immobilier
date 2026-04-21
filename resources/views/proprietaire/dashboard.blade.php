@@ -17,7 +17,7 @@
                 <div class="p-6 text-gray-900">
                     <p class="text-lg font-medium">Bienvenue, {{ Auth::user()->name }} !</p>
                     <p class="mt-2 text-sm text-gray-600">
-                        Votre espace propriétaire évolue. Vous pouvez déjà gérer vos biens, leurs photos et les comptes locataires.
+                        Votre espace propriétaire évolue. Vous pouvez déjà gérer vos biens, vos locataires et les contrats associés.
                     </p>
 
                     <div class="mt-6 flex flex-wrap gap-3">
@@ -40,6 +40,13 @@
                             class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
                         >
                             Gérer mes locataires
+                        </a>
+
+                        <a
+                            href="{{ route('proprietaire.contrats.index') }}"
+                            class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                        >
+                            Gérer mes contrats
                         </a>
                     </div>
                 </div>

@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Enums\StatutContrat;
 use Database\Factories\ContratFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'bien_id', 'locataire_id', 'date_debut', 'date_fin', 'reconduction_auto',
@@ -74,8 +76,62 @@ class Contrat extends Model
         return (float) $this->loyer_mensuel + (float) $this->charges;
     }
 
-    public function scopeActif($query)
+    public function documentDisponible(): bool
+    {
+        return filled($this->document_path);
+    }
+
+    public function signatureLabel(): string
+    {
+        return $this->isSigne() ? 'Signé' : 'Non signé';
+    }
+
+    public function nomDocument(): ?string
+    {
+        return $this->documentDisponible() ? basename($this->document_path) : null;
+    }
+
+    public function documentUrl(): ?string
+    {
+        if (! $this->documentDisponible()) {
+            return null;
+        }
+
+        return Storage::disk('local')->url($this->document_path);
+    }
+
+    public function scopeActif(Builder $query): Builder
     {
         return $query->where('statut', StatutContrat::Actif);
+    }
+
+    public function scopePourProprietaire(Builder $query, User $user): Builder
+    {
+        return $query->whereHas('bien', fn (Builder $builder) => $builder->whereBelongsTo($user, 'proprietaire'));
+    }
+
+    public function scopeRecherche(Builder $query, ?string $terme): Builder
+    {
+        $terme = trim((string) $terme);
+
+        if ($terme === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $builder) use ($terme): void {
+            $builder
+                ->whereHas('bien', function (Builder $bienQuery) use ($terme): void {
+                    $bienQuery
+                        ->where('nom', 'like', "%{$terme}%")
+                        ->orWhere('adresse', 'like', "%{$terme}%")
+                        ->orWhere('ville', 'like', "%{$terme}%");
+                })
+                ->orWhereHas('locataire', function (Builder $locataireQuery) use ($terme): void {
+                    $locataireQuery
+                        ->where('prenom', 'like', "%{$terme}%")
+                        ->orWhere('nom', 'like', "%{$terme}%")
+                        ->orWhere('email', 'like', "%{$terme}%");
+                });
+        });
     }
 }
