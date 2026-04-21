@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\MessageTicket;
+use App\Models\TicketMaintenance;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,10 @@ class MessageTicketFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'ticket_maintenance_id' => TicketMaintenance::factory(),
+            'user_id' => User::factory(),
+            'message' => fake()->paragraph(),
+            'est_note_interne' => false,
         ];
     }
 }

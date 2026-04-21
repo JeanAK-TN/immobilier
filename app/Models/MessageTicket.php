@@ -30,4 +30,9 @@ class MessageTicket extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function estVisiblePour(User $user): bool
+    {
+        return $user->isProprietaire() || ! $this->est_note_interne;
+    }
 }

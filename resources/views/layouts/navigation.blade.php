@@ -36,6 +36,15 @@
                         <x-nav-link :href="route('proprietaire.quittances.index')" :active="request()->routeIs('proprietaire.quittances.*')">
                             {{ __('Quittances') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('proprietaire.tickets.index')" :active="request()->routeIs('proprietaire.tickets.*')">
+                            {{ __('Tickets') }}
+                            @if (($ticketsActifsCount ?? 0) > 0)
+                                <span class="ms-2 inline-flex min-w-5 items-center justify-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+                                    {{ $ticketsActifsCount }}
+                                </span>
+                            @endif
+                        </x-nav-link>
                     @else
                         <x-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.dashboard')">
                             {{ __('Tableau de bord') }}
@@ -51,6 +60,15 @@
 
                         <x-nav-link :href="route('locataire.quittances.index')" :active="request()->routeIs('locataire.quittances.*')">
                             {{ __('Quittances') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('locataire.tickets.index')" :active="request()->routeIs('locataire.tickets.*')">
+                            {{ __('Tickets') }}
+                            @if (($ticketsActifsCount ?? 0) > 0)
+                                <span class="ms-2 inline-flex min-w-5 items-center justify-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+                                    {{ $ticketsActifsCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @endif
                 </div>
@@ -129,6 +147,15 @@
                 <x-responsive-nav-link :href="route('proprietaire.quittances.index')" :active="request()->routeIs('proprietaire.quittances.*')">
                     {{ __('Quittances') }}
                 </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('proprietaire.tickets.index')" :active="request()->routeIs('proprietaire.tickets.*')">
+                    {{ __('Tickets') }}
+                    @if (($ticketsActifsCount ?? 0) > 0)
+                        <span class="ms-2 inline-flex min-w-5 items-center justify-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+                            {{ $ticketsActifsCount }}
+                        </span>
+                    @endif
+                </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.dashboard')">
                     {{ __('Tableau de bord') }}
@@ -144,6 +171,15 @@
 
                 <x-responsive-nav-link :href="route('locataire.quittances.index')" :active="request()->routeIs('locataire.quittances.*')">
                     {{ __('Quittances') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('locataire.tickets.index')" :active="request()->routeIs('locataire.tickets.*')">
+                    {{ __('Tickets') }}
+                    @if (($ticketsActifsCount ?? 0) > 0)
+                        <span class="ms-2 inline-flex min-w-5 items-center justify-center rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+                            {{ $ticketsActifsCount }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>

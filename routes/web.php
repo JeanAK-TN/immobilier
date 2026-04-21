@@ -5,6 +5,8 @@ use App\Http\Controllers\Locataire\DashboardController as LocataireDashboardCont
 use App\Http\Controllers\Locataire\MonContratController;
 use App\Http\Controllers\Locataire\PaiementController as LocatairePaiementController;
 use App\Http\Controllers\Locataire\QuittanceController as LocataireQuittanceController;
+use App\Http\Controllers\Locataire\TicketMaintenanceController as LocataireTicketMaintenanceController;
+use App\Http\Controllers\Locataire\TicketMessageController as LocataireTicketMessageController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proprietaire\BienController;
@@ -13,6 +15,8 @@ use App\Http\Controllers\Proprietaire\DashboardController as ProprietaireDashboa
 use App\Http\Controllers\Proprietaire\LocataireController;
 use App\Http\Controllers\Proprietaire\PaiementController as ProprietairePaiementController;
 use App\Http\Controllers\Proprietaire\QuittanceController as ProprietaireQuittanceController;
+use App\Http\Controllers\Proprietaire\TicketMaintenanceController as ProprietaireTicketMaintenanceController;
+use App\Http\Controllers\Proprietaire\TicketMessageController as ProprietaireTicketMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -52,6 +56,8 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::get('quittances', [ProprietaireQuittanceController::class, 'index'])->name('quittances.index');
             Route::post('paiements/{paiement}/quittance', [ProprietaireQuittanceController::class, 'store'])->name('quittances.store');
             Route::get('quittances/{quittance}/telechargement', [ProprietaireQuittanceController::class, 'download'])->name('quittances.download');
+            Route::resource('tickets', ProprietaireTicketMaintenanceController::class)->only(['index', 'show', 'update']);
+            Route::post('tickets/{ticket}/messages', [ProprietaireTicketMessageController::class, 'store'])->name('tickets.messages.store');
             Route::patch('locataires/{locataire}/activation', [LocataireController::class, 'toggleActivation'])
                 ->name('locataires.activation');
             Route::resource('locataires', LocataireController::class)->except('destroy');
@@ -69,6 +75,8 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::resource('paiements', LocatairePaiementController::class)->only(['index', 'show', 'store']);
             Route::get('quittances', [LocataireQuittanceController::class, 'index'])->name('quittances.index');
             Route::get('quittances/{quittance}/telechargement', [LocataireQuittanceController::class, 'download'])->name('quittances.download');
+            Route::resource('tickets', LocataireTicketMaintenanceController::class)->only(['index', 'show', 'store']);
+            Route::post('tickets/{ticket}/messages', [LocataireTicketMessageController::class, 'store'])->name('tickets.messages.store');
         });
 });
 
