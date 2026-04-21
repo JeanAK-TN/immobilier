@@ -54,10 +54,14 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::resource('contrats', ContratController::class)->except('destroy');
             Route::resource('paiements', ProprietairePaiementController::class)->only(['index', 'show']);
             Route::get('quittances', [ProprietaireQuittanceController::class, 'index'])->name('quittances.index');
-            Route::post('paiements/{paiement}/quittance', [ProprietaireQuittanceController::class, 'store'])->name('quittances.store');
+            Route::post('paiements/{paiement}/quittance', [ProprietaireQuittanceController::class, 'store'])
+                ->name('quittances.store')
+                ->middleware('throttle:generation-quittance');
             Route::get('quittances/{quittance}/telechargement', [ProprietaireQuittanceController::class, 'download'])->name('quittances.download');
             Route::resource('tickets', ProprietaireTicketMaintenanceController::class)->only(['index', 'show', 'update']);
-            Route::post('tickets/{ticket}/messages', [ProprietaireTicketMessageController::class, 'store'])->name('tickets.messages.store');
+            Route::post('tickets/{ticket}/messages', [ProprietaireTicketMessageController::class, 'store'])
+                ->name('tickets.messages.store')
+                ->middleware('throttle:message-ticket');
             Route::patch('locataires/{locataire}/activation', [LocataireController::class, 'toggleActivation'])
                 ->name('locataires.activation');
             Route::resource('locataires', LocataireController::class)->except('destroy');
@@ -71,12 +75,22 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::get('/tableau-de-bord', LocataireDashboardController::class)->name('dashboard');
             Route::get('/mon-contrat', [MonContratController::class, 'show'])->name('contrat.show');
             Route::get('/mon-contrat/document', [MonContratController::class, 'downloadDocument'])->name('contrat.document');
-            Route::put('/mon-contrat/signature', [MonContratController::class, 'sign'])->name('contrat.sign');
-            Route::resource('paiements', LocatairePaiementController::class)->only(['index', 'show', 'store']);
+            Route::put('/mon-contrat/signature', [MonContratController::class, 'sign'])
+                ->name('contrat.sign')
+                ->middleware('throttle:signature-contrat');
+            Route::resource('paiements', LocatairePaiementController::class)->only(['index', 'show']);
+            Route::post('paiements', [LocatairePaiementController::class, 'store'])
+                ->name('paiements.store')
+                ->middleware('throttle:simulation-paiement');
             Route::get('quittances', [LocataireQuittanceController::class, 'index'])->name('quittances.index');
             Route::get('quittances/{quittance}/telechargement', [LocataireQuittanceController::class, 'download'])->name('quittances.download');
-            Route::resource('tickets', LocataireTicketMaintenanceController::class)->only(['index', 'show', 'store']);
-            Route::post('tickets/{ticket}/messages', [LocataireTicketMessageController::class, 'store'])->name('tickets.messages.store');
+            Route::resource('tickets', LocataireTicketMaintenanceController::class)->only(['index', 'show']);
+            Route::post('tickets', [LocataireTicketMaintenanceController::class, 'store'])
+                ->name('tickets.store')
+                ->middleware('throttle:creation-ticket');
+            Route::post('tickets/{ticket}/messages', [LocataireTicketMessageController::class, 'store'])
+                ->name('tickets.messages.store')
+                ->middleware('throttle:message-ticket');
         });
 });
 

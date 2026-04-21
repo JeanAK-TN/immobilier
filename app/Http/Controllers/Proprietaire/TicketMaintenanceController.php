@@ -82,6 +82,6 @@ class TicketMaintenanceController extends Controller
 
         return redirect()
             ->route('proprietaire.tickets.show', $ticket)
-            ->with('status', 'Le statut du ticket a bien ete mis a jour.');
+            ->with('status', 'Le statut du ticket a bien été mis à jour.');
     }
 }

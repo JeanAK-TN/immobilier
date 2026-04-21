@@ -79,7 +79,7 @@ class BienController extends Controller
 
         return redirect()
             ->route('proprietaire.biens.show', $bien)
-            ->with('status', 'Le bien a bien ete cree.');
+            ->with('status', 'Le bien a bien été créé.');
     }
 
     /**
@@ -131,7 +131,7 @@ class BienController extends Controller
 
         return redirect()
             ->route('proprietaire.biens.show', $bien)
-            ->with('status', 'Le bien a bien ete mis a jour.');
+            ->with('status', 'Le bien a bien été mis à jour.');
     }
 
     /**
@@ -146,7 +146,7 @@ class BienController extends Controller
 
         return redirect()
             ->route('proprietaire.biens.index')
-            ->with('status', 'Le bien a bien ete supprime.');
+            ->with('status', 'Le bien a bien été supprimé.');
     }
 
     /**

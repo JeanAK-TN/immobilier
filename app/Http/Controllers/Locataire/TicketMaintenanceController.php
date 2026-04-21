@@ -80,7 +80,7 @@ class TicketMaintenanceController extends Controller
 
         return redirect()
             ->route('locataire.tickets.show', $ticket)
-            ->with('status', 'Le ticket de maintenance a bien ete cree.');
+            ->with('status', 'Le ticket de maintenance a bien été créé.');
     }
 
     public function show(Request $request, TicketMaintenance $ticket): View

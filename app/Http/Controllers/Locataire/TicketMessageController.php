@@ -25,6 +25,6 @@ class TicketMessageController extends Controller
 
         return redirect()
             ->route('locataire.tickets.show', $ticket)
-            ->with('status', 'Votre message a bien ete ajoute.');
+            ->with('status', 'Votre message a bien été ajouté.');
     }
 }
