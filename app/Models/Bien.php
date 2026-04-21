@@ -6,6 +6,7 @@ use App\Enums\StatutBien;
 use App\Enums\TypeBien;
 use Database\Factories\BienFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,5 +50,45 @@ class Bien extends Model
     public function isOccupe(): bool
     {
         return $this->statut === StatutBien::Occupe;
+    }
+
+    public function estOccupeActuellement(): bool
+    {
+        if (array_key_exists('contrat_actif_count', $this->attributes)) {
+            return (int) $this->getAttribute('contrat_actif_count') > 0;
+        }
+
+        if ($this->relationLoaded('contratActif')) {
+            return $this->contratActif->isNotEmpty();
+        }
+
+        return $this->isOccupe();
+    }
+
+    public function occupationLabel(): string
+    {
+        return $this->estOccupeActuellement() ? 'Occupé' : 'Disponible';
+    }
+
+    public function scopePourProprietaire(Builder $query, User $user): Builder
+    {
+        return $query->whereBelongsTo($user, 'proprietaire');
+    }
+
+    public function scopeRecherche(Builder $query, ?string $terme): Builder
+    {
+        $terme = trim((string) $terme);
+
+        if ($terme === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $builder) use ($terme): void {
+            $builder
+                ->where('nom', 'like', "%{$terme}%")
+                ->orWhere('adresse', 'like', "%{$terme}%")
+                ->orWhere('ville', 'like', "%{$terme}%")
+                ->orWhere('pays', 'like', "%{$terme}%");
+        });
     }
 }

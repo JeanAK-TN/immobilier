@@ -13,8 +13,12 @@
                 <!-- Liens de navigation -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (Auth::user()->isProprietaire())
-                        <x-nav-link :href="route('proprietaire.dashboard')" :active="request()->routeIs('proprietaire.*')">
+                        <x-nav-link :href="route('proprietaire.dashboard')" :active="request()->routeIs('proprietaire.dashboard')">
                             {{ __('Tableau de bord') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('proprietaire.biens.index')" :active="request()->routeIs('proprietaire.biens.*')">
+                            {{ __('Biens') }}
                         </x-nav-link>
                     @else
                         <x-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">
@@ -74,8 +78,12 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @if (Auth::user()->isProprietaire())
-                <x-responsive-nav-link :href="route('proprietaire.dashboard')" :active="request()->routeIs('proprietaire.*')">
+                <x-responsive-nav-link :href="route('proprietaire.dashboard')" :active="request()->routeIs('proprietaire.dashboard')">
                     {{ __('Tableau de bord') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('proprietaire.biens.index')" :active="request()->routeIs('proprietaire.biens.*')">
+                    {{ __('Biens') }}
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">

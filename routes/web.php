@@ -4,6 +4,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Locataire\DashboardController as LocataireDashboardController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Proprietaire\BienController;
 use App\Http\Controllers\Proprietaire\DashboardController as ProprietaireDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
         ->name('proprietaire.')
         ->group(function (): void {
             Route::get('/tableau-de-bord', ProprietaireDashboardController::class)->name('dashboard');
+            Route::resource('biens', BienController::class);
         });
 
     // Espace locataire
