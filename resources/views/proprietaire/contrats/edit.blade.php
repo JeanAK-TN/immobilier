@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                <h2 class="text-xl font-semibold leading-tight text-gray-900">
                     {{ __('Modifier le contrat') }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-500">
@@ -13,14 +13,14 @@
             <div class="flex flex-wrap items-center gap-3">
                 <a
                     href="{{ route('proprietaire.contrats.show', $contrat) }}"
-                    class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
                 >
                     {{ __('Voir la fiche') }}
                 </a>
 
                 <a
                     href="{{ route('proprietaire.contrats.index') }}"
-                    class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
                 >
                     {{ __('Retour à la liste') }}
                 </a>
@@ -28,9 +28,9 @@
         </div>
     </x-slot>
 
-    <div class="py-10">
+    <div class="py-8">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
                 <form method="POST" action="{{ route('proprietaire.contrats.update', $contrat) }}" enctype="multipart/form-data" class="grid gap-8">
                     @csrf
                     @method('PUT')

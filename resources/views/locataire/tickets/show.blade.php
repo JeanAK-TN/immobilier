@@ -2,9 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    {{ $ticket->titre }}
-                </h2>
+                <h2 class="text-xl font-semibold leading-tight text-gray-900">{{ $ticket->titre }}</h2>
                 <p class="mt-1 text-sm text-gray-500">
                     {{ __('Bien concerné : :bien', ['bien' => $ticket->contrat->bien->nom]) }}
                 </p>
@@ -12,124 +10,165 @@
 
             <a
                 href="{{ route('locataire.tickets.index') }}"
-                class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
             >
-                {{ __('Retour aux tickets') }}
+                ← {{ __('Mes tickets') }}
             </a>
         </div>
     </x-slot>
 
-    <div class="py-10">
-        <div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:px-8 xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
-            <div class="grid gap-6">
-                @if (session('status'))
-                    <div class="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                        {{ session('status') }}
-                    </div>
-                @endif
+    <div class="py-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <x-tickets.status-badge :status="$ticket->statut" />
-                        <x-tickets.priority-badge :priority="$ticket->priorite" />
-                        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-                            {{ $ticket->categorie->label() }}
-                        </span>
-                    </div>
+            @if (session('status'))
+                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3.5 text-sm font-medium text-green-800">
+                    {{ session('status') }}
+                </div>
+            @endif
 
-                    <div class="mt-5 rounded-2xl bg-gray-50 p-5">
-                        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">{{ __('Description initiale') }}</h3>
-                        <p class="mt-3 whitespace-pre-line text-sm leading-7 text-gray-700">{{ $ticket->description }}</p>
-                    </div>
+            <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(280px,0.35fr)]">
 
-                    @if ($ticket->piecesJointes->isNotEmpty())
-                        <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                            @foreach ($ticket->piecesJointes as $pieceJointe)
-                                <a href="{{ $pieceJointe->url() }}" target="_blank" class="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
-                                    <img src="{{ $pieceJointe->url() }}" alt="{{ $pieceJointe->nom_original }}" class="h-48 w-full object-cover" />
-                                    <div class="px-4 py-3 text-xs text-gray-500">
-                                        {{ $pieceJointe->nom_original }}
+                {{-- COLONNE PRINCIPALE : messagerie --}}
+                <div class="flex flex-col gap-6">
+
+                    {{-- Fil de discussion --}}
+                    <section class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+                            <h3 class="font-semibold text-gray-900">{{ __('Fil de discussion') }}</h3>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <x-tickets.status-badge :status="$ticket->statut" />
+                                <x-tickets.priority-badge :priority="$ticket->priorite" />
+                            </div>
+                        </div>
+
+                        {{-- Messages scrollables --}}
+                        <div
+                            class="flex flex-col gap-3 overflow-y-auto px-6 py-5"
+                            style="min-height: 240px; max-height: 55vh"
+                            x-data
+                            x-init="$el.scrollTop = $el.scrollHeight"
+                        >
+                            @if ($ticket->messages->isEmpty())
+                                <div class="flex flex-1 items-center justify-center py-12 text-sm text-gray-400">
+                                    {{ __('Aucun message pour le moment. Soyez le premier à écrire.') }}
+                                </div>
+                            @else
+                                @foreach ($ticket->messages as $message)
+                                    <article class="rounded-2xl border border-gray-200 p-4">
+                                        <div class="flex items-center justify-between gap-3">
+                                            <p class="text-sm font-semibold text-gray-900">{{ $message->auteur->name }}</p>
+                                            <p class="text-xs text-gray-400">{{ $message->created_at->translatedFormat('d M Y à H:i') }}</p>
+                                        </div>
+                                        <p class="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-700">{{ $message->message }}</p>
+                                    </article>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        {{-- Réponse --}}
+                        @can('reply', $ticket)
+                            <div class="border-t border-gray-100 px-6 py-5">
+                                <form method="POST" action="{{ route('locataire.tickets.messages.store', $ticket) }}" class="grid gap-3">
+                                    @csrf
+                                    <div>
+                                        <x-input-label for="message" :value="__('Votre message')" />
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            rows="3"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            placeholder="{{ __('Écrivez votre réponse…') }}"
+                                            required
+                                        >{{ old('message') }}</textarea>
+                                        <x-input-error :messages="$errors->get('message')" class="mt-2" />
                                     </div>
-                                </a>
-                            @endforeach
-                        </div>
-                    @endif
-                </section>
-
-                <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ __('Fil de discussion') }}</h3>
-                        <p class="mt-1 text-sm text-gray-500">{{ __('Échangez ici avec votre propriétaire au sujet de ce ticket.') }}</p>
-                    </div>
-
-                    @if ($ticket->messages->isEmpty())
-                        <div class="mt-6 rounded-2xl border border-dashed border-gray-300 px-6 py-10 text-center text-sm text-gray-500">
-                            {{ __('Aucun message pour le moment.') }}
-                        </div>
-                    @else
-                        <div class="mt-6 grid gap-4">
-                            @foreach ($ticket->messages as $message)
-                                <article class="rounded-2xl border border-gray-200 p-5">
-                                    <div class="flex items-center justify-between gap-3">
-                                        <p class="font-semibold text-gray-900">{{ $message->auteur->name }}</p>
-                                        <p class="text-xs uppercase tracking-wide text-gray-400">{{ $message->created_at->translatedFormat('d M Y H:i') }}</p>
+                                    <div>
+                                        <x-primary-button>{{ __('Envoyer') }}</x-primary-button>
                                     </div>
-                                    <p class="mt-3 whitespace-pre-line text-sm leading-7 text-gray-700">{{ $message->message }}</p>
-                                </article>
-                            @endforeach
+                                </form>
+                            </div>
+                        @else
+                            <div class="border-t border-gray-100 px-6 py-4 text-sm text-gray-400">
+                                {{ __('Ce ticket est fermé et ne peut plus recevoir de messages.') }}
+                            </div>
+                        @endcan
+                    </section>
+
+                </div>
+
+                {{-- SIDEBAR : description + infos --}}
+                <aside class="grid gap-4 content-start">
+
+                    {{-- Description --}}
+                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" x-data="{ open: false }">
+                        <button
+                            type="button"
+                            class="flex w-full items-center justify-between gap-2 text-left"
+                            @click="open = !open"
+                        >
+                            <span class="text-sm font-semibold text-gray-900">{{ __('Description initiale') }}</span>
+                            <span class="text-gray-400 transition-transform" :class="{ 'rotate-180': open }">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                            </span>
+                        </button>
+
+                        <div x-show="open" x-cloak x-transition class="mt-4">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">{{ $ticket->categorie->label() }}</span>
+                            </div>
+                            <p class="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-600">{{ $ticket->description }}</p>
+
+                            @if ($ticket->piecesJointes->isNotEmpty())
+                                <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                                    @foreach ($ticket->piecesJointes as $pieceJointe)
+                                        <a href="{{ $pieceJointe->url() }}" target="_blank" class="overflow-hidden rounded-xl border border-gray-200">
+                                            <img src="{{ $pieceJointe->url() }}" alt="{{ $pieceJointe->nom_original }}" class="h-32 w-full object-cover" />
+                                            <div class="px-3 py-2 text-xs text-gray-500 truncate">{{ $pieceJointe->nom_original }}</div>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </section>
 
-                    @can('reply', $ticket)
-                        <form method="POST" action="{{ route('locataire.tickets.messages.store', $ticket) }}" class="mt-6 grid gap-4">
-                            @csrf
+                    {{-- Informations --}}
+                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                        <h3 class="text-sm font-semibold text-gray-900">{{ __('Informations') }}</h3>
 
+                        <dl class="mt-4 grid gap-3 text-sm">
                             <div>
-                                <x-input-label for="message" :value="__('Ajouter un message')" />
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    rows="4"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    required
-                                >{{ old('message') }}</textarea>
-                                <x-input-error :messages="$errors->get('message')" class="mt-2" />
+                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Statut') }}</dt>
+                                <dd class="mt-1 flex">
+                                    <x-tickets.status-badge :status="$ticket->statut" />
+                                </dd>
                             </div>
 
-                            <x-primary-button class="justify-center sm:w-fit">
-                                {{ __('Envoyer le message') }}
-                            </x-primary-button>
-                        </form>
-                    @else
-                        <div class="mt-6 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
-                            {{ __('Ce ticket est fermé et ne peut plus recevoir de nouveaux messages.') }}
-                        </div>
-                    @endcan
-                </section>
+                            <div>
+                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Priorité') }}</dt>
+                                <dd class="mt-1 flex">
+                                    <x-tickets.priority-badge :priority="$ticket->priorite" />
+                                </dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse du bien') }}</dt>
+                                <dd class="mt-1 text-gray-700">{{ $ticket->contrat->bien->adresse }}, {{ $ticket->contrat->bien->ville }}</dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
+                                <dd class="mt-1 text-gray-700">{{ $ticket->created_at->translatedFormat('d F Y') }}</dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Mis à jour') }}</dt>
+                                <dd class="mt-1 text-gray-700">{{ $ticket->updated_at->translatedFormat('d F Y') }}</dd>
+                            </div>
+                        </dl>
+                    </section>
+
+                </aside>
             </div>
-
-            <aside class="grid gap-6">
-                <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">{{ __('Informations du ticket') }}</h3>
-
-                    <dl class="mt-5 grid gap-4 text-sm text-gray-700">
-                        <div>
-                            <dt class="text-xs uppercase tracking-wide text-gray-500">{{ __('Créé le') }}</dt>
-                            <dd class="mt-2 font-semibold text-gray-900">{{ $ticket->created_at->translatedFormat('d F Y à H:i') }}</dd>
-                        </div>
-
-                        <div>
-                            <dt class="text-xs uppercase tracking-wide text-gray-500">{{ __('Dernière mise à jour') }}</dt>
-                            <dd class="mt-2">{{ $ticket->updated_at->translatedFormat('d F Y à H:i') }}</dd>
-                        </div>
-
-                        <div>
-                            <dt class="text-xs uppercase tracking-wide text-gray-500">{{ __('Adresse du bien') }}</dt>
-                            <dd class="mt-2">{{ $ticket->contrat->bien->adresse }}, {{ $ticket->contrat->bien->ville }}</dd>
-                        </div>
-                    </dl>
-                </section>
-            </aside>
         </div>
     </div>
 </x-app-layout>

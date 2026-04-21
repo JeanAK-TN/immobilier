@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                <h2 class="text-xl font-semibold leading-tight text-gray-900">
                     {{ __('Paiements simulés') }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-500">
@@ -12,15 +12,20 @@
         </div>
     </x-slot>
 
-    <div class="py-10">
+    <div class="py-8">
         <div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:px-8">
-            <div class="rounded-3xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">
-                <p class="font-semibold">{{ __('Paiement simulé - aucune transaction réelle') }}</p>
-                <p class="mt-2">{{ __('Tous les paiements affichés ici sont des simulations automatiquement validées comme réussies lors de leur création.') }}</p>
+
+            <div class="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm text-amber-900">
+                <span class="mt-0.5 shrink-0 text-amber-500">⚠</span>
+                <div>
+                    <p class="font-semibold">{{ __('Paiement simulé - aucune transaction réelle') }}</p>
+                    <p class="mt-1 text-amber-800">{{ __('Tous les paiements affichés ici sont des simulations automatiquement validées comme réussies lors de leur création.') }}</p>
+                </div>
             </div>
 
-            <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                <form method="GET" action="{{ route('proprietaire.paiements.index') }}" class="grid gap-4 lg:grid-cols-4 lg:items-end">
+            {{-- Filtres --}}
+            <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                <form method="GET" action="{{ route('proprietaire.paiements.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
                     <div class="grid gap-2">
                         <x-input-label for="bien_id" :value="__('Bien')" />
                         <select id="bien_id" name="bien_id" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -56,7 +61,7 @@
                         </select>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-3 lg:col-span-4">
+                    <div class="flex flex-wrap items-center gap-3 sm:col-span-2 lg:col-span-4">
                         <x-primary-button>{{ __('Filtrer') }}</x-primary-button>
                         <a
                             href="{{ route('proprietaire.paiements.index') }}"
@@ -69,41 +74,59 @@
             </section>
 
             @if ($paiements->isEmpty())
-                <section class="rounded-3xl border border-dashed border-gray-300 bg-white p-10 text-center shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">{{ __('Aucun paiement trouvé') }}</h3>
+                <section class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
+                    <p class="text-4xl text-gray-300">💳</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun paiement trouvé') }}</h3>
                     <p class="mt-2 text-sm text-gray-500">{{ __('Ajustez les filtres ou attendez qu\'un locataire enregistre une nouvelle simulation.') }}</p>
                 </section>
             @else
-                <section class="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-                    @foreach ($paiements as $paiement)
-                        <article class="grid gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="text-lg font-semibold text-gray-900">{{ $paiement->contrat->locataire->nomComplet() }}</p>
-                                    <p class="mt-1 text-sm text-gray-500">{{ $paiement->contrat->bien->nom }}</p>
-                                    <p class="mt-1 text-xs uppercase tracking-wide text-gray-400">{{ $paiement->reference }}</p>
-                                </div>
-
-                                <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200">
-                                    {{ $paiement->statut->label() }}
-                                </span>
-                            </div>
-
-                            <div class="grid gap-2 text-sm text-gray-600">
-                                <p>{{ __('Période : :periode', ['periode' => $paiement->labelPeriode()]) }}</p>
-                                <p>{{ __('Mode : :mode', ['mode' => $paiement->modeLabel()]) }}</p>
-                                <p>{{ __('Montant :') }} <x-money :amount="$paiement->montant" /></p>
-                            </div>
-
-                            <a
-                                href="{{ route('proprietaire.paiements.show', $paiement) }}"
-                                class="inline-flex items-center justify-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
-                            >
-                                {{ __('Voir le reçu') }}
-                            </a>
-                        </article>
-                    @endforeach
-                </section>
+                <div class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Locataire') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Bien') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Période') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Montant') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Mode') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Référence') }}</th>
+                                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Statut') }}</th>
+                                    <th class="relative px-5 py-3"><span class="sr-only">{{ __('Actions') }}</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 bg-white">
+                                @foreach ($paiements as $paiement)
+                                    <tr class="transition hover:bg-gray-50">
+                                        <td class="whitespace-nowrap px-5 py-4">
+                                            <p class="font-medium text-gray-900">{{ $paiement->contrat->locataire->nomComplet() }}</p>
+                                        </td>
+                                        <td class="whitespace-nowrap px-5 py-4 text-gray-600">{{ $paiement->contrat->bien->nom }}</td>
+                                        <td class="whitespace-nowrap px-5 py-4 text-gray-600">{{ $paiement->labelPeriode() }}</td>
+                                        <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-900">
+                                            <x-money :amount="$paiement->montant" />
+                                        </td>
+                                        <td class="whitespace-nowrap px-5 py-4 text-gray-600">{{ $paiement->modeLabel() }}</td>
+                                        <td class="whitespace-nowrap px-5 py-4 font-mono text-xs text-gray-400">{{ $paiement->reference }}</td>
+                                        <td class="whitespace-nowrap px-5 py-4">
+                                            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200">
+                                                {{ $paiement->statut->label() }}
+                                            </span>
+                                        </td>
+                                        <td class="whitespace-nowrap px-5 py-4 text-right">
+                                            <a
+                                                href="{{ route('proprietaire.paiements.show', $paiement) }}"
+                                                class="font-medium text-gray-700 hover:text-gray-900"
+                                            >
+                                                {{ __('Voir') }} →
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <div>
                     {{ $paiements->links() }}
