@@ -95,6 +95,7 @@ test('proprietaire can view a contrat detail page', function () {
     $response->assertSee('Conditions financières');
     $response->assertSee($contrat->bien->nom);
     $response->assertSee($contrat->locataire->nomComplet());
+    $response->assertSee('FCFA');
 });
 
 test('proprietaire can update a contrat and sync bien occupancy', function () {

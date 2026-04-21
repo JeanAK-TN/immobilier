@@ -100,22 +100,22 @@
                         <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                             <div class="rounded-2xl bg-gray-50 p-5">
                                 <p class="text-xs uppercase tracking-wide text-gray-500">{{ __('Loyer mensuel') }}</p>
-                                <p class="mt-2 text-xl font-semibold text-gray-900">{{ number_format((float) $contrat->loyer_mensuel, 2, ',', ' ') }} €</p>
+                                <p class="mt-2 text-xl font-semibold text-gray-900"><x-money :amount="$contrat->loyer_mensuel" /></p>
                             </div>
 
                             <div class="rounded-2xl bg-gray-50 p-5">
                                 <p class="text-xs uppercase tracking-wide text-gray-500">{{ __('Charges') }}</p>
-                                <p class="mt-2 text-xl font-semibold text-gray-900">{{ number_format((float) $contrat->charges, 2, ',', ' ') }} €</p>
+                                <p class="mt-2 text-xl font-semibold text-gray-900"><x-money :amount="$contrat->charges" /></p>
                             </div>
 
                             <div class="rounded-2xl bg-gray-50 p-5">
                                 <p class="text-xs uppercase tracking-wide text-gray-500">{{ __('Dépôt de garantie') }}</p>
-                                <p class="mt-2 text-xl font-semibold text-gray-900">{{ number_format((float) $contrat->depot_garantie, 2, ',', ' ') }} €</p>
+                                <p class="mt-2 text-xl font-semibold text-gray-900"><x-money :amount="$contrat->depot_garantie" /></p>
                             </div>
 
                             <div class="rounded-2xl bg-gray-50 p-5">
                                 <p class="text-xs uppercase tracking-wide text-gray-500">{{ __('Total mensuel') }}</p>
-                                <p class="mt-2 text-xl font-semibold text-gray-900">{{ number_format($contrat->montantTotalMensuel(), 2, ',', ' ') }} €</p>
+                                <p class="mt-2 text-xl font-semibold text-gray-900"><x-money :amount="$contrat->montantTotalMensuel()" /></p>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                         @else
                             <div class="mt-5 rounded-2xl bg-amber-50 p-5 text-sm text-amber-900">
                                 <p class="font-semibold">{{ __('Aucune signature enregistrée') }}</p>
-                                <p class="mt-2">{{ __('La signature simple sera gérée dans l\'espace locataire à l\'étape suivante.') }}</p>
+                                <p class="mt-2">{{ __('Le locataire peut signer ce contrat depuis son espace dédié dès que le bail lui est présenté.') }}</p>
                             </div>
                         @endif
                     </section>

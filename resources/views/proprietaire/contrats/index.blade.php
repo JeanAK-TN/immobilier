@@ -122,7 +122,7 @@
 
                             <div class="grid gap-2 text-sm text-gray-600">
                                 <p>{{ __('Début : :date', ['date' => $contrat->date_debut->translatedFormat('d/m/Y')]) }}</p>
-                                <p>{{ __('Loyer : :montant €', ['montant' => number_format((float) $contrat->loyer_mensuel, 2, ',', ' ')]) }}</p>
+                                <p>{{ __('Loyer :') }} <x-money :amount="$contrat->loyer_mensuel" /></p>
                                 <p>{{ $contrat->documentDisponible() ? __('Document PDF disponible') : __('Aucun document PDF') }}</p>
                             </div>
 

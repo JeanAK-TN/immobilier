@@ -71,6 +71,17 @@ class Contrat extends Model
         return $this->signe_le !== null;
     }
 
+    public function peutEtreSigne(): bool
+    {
+        return $this->statut === StatutContrat::EnAttente
+            && ! $this->isSigne()
+            && $this->documentDisponible()
+            && $this->bien_id !== null
+            && $this->locataire_id !== null
+            && $this->date_debut !== null
+            && $this->loyer_mensuel !== null;
+    }
+
     public function montantTotalMensuel(): float
     {
         return (float) $this->loyer_mensuel + (float) $this->charges;

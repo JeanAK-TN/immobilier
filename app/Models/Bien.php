@@ -70,6 +70,15 @@ class Bien extends Model
         return $this->estOccupeActuellement() ? 'Occupé' : 'Disponible';
     }
 
+    public function synchroniserStatutOccupation(): void
+    {
+        $this->update([
+            'statut' => $this->contratActif()->exists()
+                ? StatutBien::Occupe
+                : StatutBien::Disponible,
+        ]);
+    }
+
     public function scopePourProprietaire(Builder $query, User $user): Builder
     {
         return $query->whereBelongsTo($user, 'proprietaire');

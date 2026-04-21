@@ -29,8 +29,12 @@
                             {{ __('Contrats') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">
+                        <x-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.dashboard')">
                             {{ __('Tableau de bord') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('locataire.contrat.show')" :active="request()->routeIs('locataire.contrat.*')">
+                            {{ __('Mon contrat') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -102,8 +106,12 @@
                     {{ __('Contrats') }}
                 </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">
+                <x-responsive-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.dashboard')">
                     {{ __('Tableau de bord') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('locataire.contrat.show')" :active="request()->routeIs('locataire.contrat.*')">
+                    {{ __('Mon contrat') }}
                 </x-responsive-nav-link>
             @endif
         </div>

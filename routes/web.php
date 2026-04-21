@@ -2,6 +2,7 @@
 
 use App\Enums\Role;
 use App\Http\Controllers\Locataire\DashboardController as LocataireDashboardController;
+use App\Http\Controllers\Locataire\MonContratController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proprietaire\BienController;
@@ -54,6 +55,9 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
         ->name('locataire.')
         ->group(function (): void {
             Route::get('/tableau-de-bord', LocataireDashboardController::class)->name('dashboard');
+            Route::get('/mon-contrat', [MonContratController::class, 'show'])->name('contrat.show');
+            Route::get('/mon-contrat/document', [MonContratController::class, 'downloadDocument'])->name('contrat.document');
+            Route::put('/mon-contrat/signature', [MonContratController::class, 'sign'])->name('contrat.sign');
         });
 });
 

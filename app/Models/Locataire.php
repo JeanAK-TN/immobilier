@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatutContrat;
 use Database\Factories\LocataireFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,21 @@ class Locataire extends Model
     public function contrats(): HasMany
     {
         return $this->hasMany(Contrat::class);
+    }
+
+    public function contratCourant(): ?Contrat
+    {
+        return $this->contrats()
+            ->whereIn('statut', [
+                StatutContrat::EnAttente->value,
+                StatutContrat::Actif->value,
+            ])
+            ->orderByRaw(
+                'case when statut = ? then 0 when statut = ? then 1 else 2 end',
+                [StatutContrat::EnAttente->value, StatutContrat::Actif->value]
+            )
+            ->orderByDesc('date_debut')
+            ->first();
     }
 
     public function nomComplet(): string

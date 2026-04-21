@@ -10,6 +10,10 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        return view('locataire.dashboard');
+        $contrat = $request->user()?->locataire?->contratCourant()?->load('bien');
+
+        return view('locataire.dashboard', [
+            'contrat' => $contrat,
+        ]);
     }
 }

@@ -220,9 +220,7 @@ class ContratController extends Controller
             return;
         }
 
-        $bien->update([
-            'statut' => $bien->contratActif()->exists() ? 'occupe' : 'disponible',
-        ]);
+        $bien->synchroniserStatutOccupation();
     }
 
     private function stockerDocument(mixed $document): ?string

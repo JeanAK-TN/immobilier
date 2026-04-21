@@ -20,7 +20,11 @@ class ContratPolicy
      */
     public function view(User $user, Contrat $contrat): bool
     {
-        return $user->isProprietaire() && $contrat->bien->user_id === $user->id;
+        if ($user->isProprietaire()) {
+            return $contrat->bien->user_id === $user->id;
+        }
+
+        return $user->isLocataire() && $contrat->locataire->user_id === $user->id;
     }
 
     /**
@@ -37,6 +41,16 @@ class ContratPolicy
     public function update(User $user, Contrat $contrat): bool
     {
         return $user->isProprietaire() && $contrat->bien->user_id === $user->id;
+    }
+
+    /**
+     * Determine whether the locataire can sign the model.
+     */
+    public function sign(User $user, Contrat $contrat): bool
+    {
+        return $user->isLocataire()
+            && $contrat->locataire->user_id === $user->id
+            && $contrat->peutEtreSigne();
     }
 
     /**
