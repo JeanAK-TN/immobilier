@@ -3,12 +3,14 @@
 use App\Enums\Role;
 use App\Http\Controllers\Locataire\DashboardController as LocataireDashboardController;
 use App\Http\Controllers\Locataire\MonContratController;
+use App\Http\Controllers\Locataire\PaiementController as LocatairePaiementController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proprietaire\BienController;
 use App\Http\Controllers\Proprietaire\ContratController;
 use App\Http\Controllers\Proprietaire\DashboardController as ProprietaireDashboardController;
 use App\Http\Controllers\Proprietaire\LocataireController;
+use App\Http\Controllers\Proprietaire\PaiementController as ProprietairePaiementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,6 +46,7 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::get('contrats/{contrat}/document', [ContratController::class, 'downloadDocument'])
                 ->name('contrats.document');
             Route::resource('contrats', ContratController::class)->except('destroy');
+            Route::resource('paiements', ProprietairePaiementController::class)->only(['index', 'show']);
             Route::patch('locataires/{locataire}/activation', [LocataireController::class, 'toggleActivation'])
                 ->name('locataires.activation');
             Route::resource('locataires', LocataireController::class)->except('destroy');
@@ -58,6 +61,7 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
             Route::get('/mon-contrat', [MonContratController::class, 'show'])->name('contrat.show');
             Route::get('/mon-contrat/document', [MonContratController::class, 'downloadDocument'])->name('contrat.document');
             Route::put('/mon-contrat/signature', [MonContratController::class, 'sign'])->name('contrat.sign');
+            Route::resource('paiements', LocatairePaiementController::class)->only(['index', 'show', 'store']);
         });
 });
 

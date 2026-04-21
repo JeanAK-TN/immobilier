@@ -13,11 +13,11 @@ enum ModePaiement: string
     public function label(): string
     {
         return match ($this) {
-            ModePaiement::MobileMoney => 'Mobile Money (simulé)',
-            ModePaiement::Virement => 'Virement bancaire (simulé)',
-            ModePaiement::Especes => 'Espèces (simulé)',
-            ModePaiement::Cheque => 'Chèque (simulé)',
-            ModePaiement::Autre => 'Autre (simulé)',
+            ModePaiement::MobileMoney => 'Mobile Money',
+            ModePaiement::Virement => 'Virement bancaire',
+            ModePaiement::Especes => 'Espèces',
+            ModePaiement::Cheque => 'Chèque',
+            ModePaiement::Autre => 'Autre',
         };
     }
 }

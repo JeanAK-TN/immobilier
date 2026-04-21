@@ -47,6 +47,14 @@ class Locataire extends Model
             ->first();
     }
 
+    public function contratActif(): ?Contrat
+    {
+        return $this->contrats()
+            ->where('statut', StatutContrat::Actif->value)
+            ->latest('date_debut')
+            ->first();
+    }
+
     public function nomComplet(): string
     {
         return "{$this->prenom} {$this->nom}";

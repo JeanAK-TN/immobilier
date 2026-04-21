@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Paiement;
+use App\Models\User;
+
+class PaiementPolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->isProprietaire() || $user->isLocataire();
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Paiement $paiement): bool
+    {
+        if ($user->isProprietaire()) {
+            return $paiement->contrat->bien->user_id === $user->id;
+        }
+
+        return $user->isLocataire() && $paiement->contrat->locataire->user_id === $user->id;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->isLocataire();
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Paiement $paiement): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Paiement $paiement): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Paiement $paiement): bool
+    {
+        return false;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Paiement $paiement): bool
+    {
+        return false;
+    }
+}
