@@ -147,6 +147,44 @@
                             @endif
                         </div>
                     </div>
+
+                    <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ __('Historique des quittances') }}</h3>
+                                <p class="mt-1 text-sm text-gray-500">{{ __('Quittances PDF déjà générées pour ce contrat.') }}</p>
+                            </div>
+
+                            <a
+                                href="{{ route('proprietaire.quittances.index', ['contrat_id' => $contrat->id]) }}"
+                                class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                            >
+                                {{ __('Voir toutes les quittances') }}
+                            </a>
+                        </div>
+
+                        @if ($contrat->quittances->isEmpty())
+                            <p class="mt-6 text-sm text-gray-500">{{ __('Aucune quittance n\'a encore été générée pour ce contrat.') }}</p>
+                        @else
+                            <div class="mt-6 grid gap-4">
+                                @foreach ($contrat->quittances->sortByDesc('emise_le') as $quittance)
+                                    <article class="flex flex-col gap-3 rounded-2xl border border-gray-200 p-4 text-sm text-gray-700 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">{{ $quittance->numero_quittance }}</p>
+                                            <p class="mt-1">{{ $quittance->labelPeriode() }} • <x-money :amount="$quittance->paiement->montant" /></p>
+                                        </div>
+
+                                        <a
+                                            href="{{ route('proprietaire.quittances.download', $quittance) }}"
+                                            class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                                        >
+                                            {{ __('Télécharger le PDF') }}
+                                        </a>
+                                    </article>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </section>
 
                 <aside class="grid gap-6">

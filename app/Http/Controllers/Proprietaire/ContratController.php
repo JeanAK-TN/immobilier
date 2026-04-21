@@ -107,7 +107,7 @@ class ContratController extends Controller
     {
         $this->authorize('view', $contrat);
 
-        $contrat->load(['bien', 'locataire', 'paiements', 'quittances']);
+        $contrat->load(['bien', 'locataire', 'paiements', 'quittances.paiement']);
 
         $audits = JournalAudit::query()
             ->where('modele_type', Contrat::class)

@@ -77,7 +77,7 @@ class PaiementController extends Controller
     {
         $this->authorize('view', $paiement);
 
-        $paiement->load(['contrat.bien', 'contrat.locataire']);
+        $paiement->load(['contrat.bien', 'contrat.locataire', 'quittance']);
 
         return view('locataire.paiements.show', [
             'paiement' => $paiement,

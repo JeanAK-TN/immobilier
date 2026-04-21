@@ -26,7 +26,7 @@ test('locataire can view the simulated paiement page with mobile money options',
     $response->assertSee('Paiement simulé - aucune transaction réelle');
     $response->assertSee('Mixx/TMoney');
     $response->assertSee('Moov');
-    $response->assertSee('Valider la simulation');
+    $response->assertSee('Valider le paiement');
 });
 
 test('locataire can simulate a successful paiement with Mixx TMoney', function () {

@@ -121,8 +121,8 @@
                             </div>
 
                             <div class="rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
-                                <p class="font-semibold text-gray-900">{{ __('Règle de simulation') }}</p>
-                                <p class="mt-2">{{ __('Cette application enregistre immédiatement le paiement comme “Simulé - Réussi”. Aucun traitement bancaire ou Mobile Money réel n\'est exécuté.') }}</p>
+                                <p class="font-semibold text-gray-900">{{ __('Information importante') }}</p>
+                                <p class="mt-2">{{ __('Le paiement est validé immédiatement dans le cadre de cette démonstration. Aucun débit réel n\'est effectué.') }}</p>
                             </div>
 
                             <x-primary-button class="justify-center">
@@ -158,8 +158,8 @@
                 <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
                     <div class="flex items-center justify-between gap-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Historique des simulations') }}</h3>
-                            <p class="mt-1 text-sm text-gray-500">{{ __('Touts vos paiements liées au contrat actif.') }}</p>
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Historique des paiements') }}</h3>
+                            <p class="mt-1 text-sm text-gray-500">{{ __('Tous vos paiements liés au contrat actif.') }}</p>
                         </div>
                     </div>
 
