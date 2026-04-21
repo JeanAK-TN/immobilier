@@ -43,6 +43,20 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('inactive users can not authenticate', function () {
+    $user = User::factory()->inactif()->create();
+
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors([
+        'email' => 'Ce compte est désactivé. Veuillez contacter le propriétaire.',
+    ]);
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

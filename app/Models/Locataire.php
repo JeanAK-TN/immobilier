@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\LocataireFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,5 +34,32 @@ class Locataire extends Model
     public function nomComplet(): string
     {
         return "{$this->prenom} {$this->nom}";
+    }
+
+    public function compteActif(): bool
+    {
+        return $this->user?->is_active ?? false;
+    }
+
+    public function scopePourProprietaire(Builder $query, User $user): Builder
+    {
+        return $query->whereBelongsTo($user, 'creePar');
+    }
+
+    public function scopeRecherche(Builder $query, ?string $terme): Builder
+    {
+        $terme = trim((string) $terme);
+
+        if ($terme === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $builder) use ($terme): void {
+            $builder
+                ->where('prenom', 'like', "%{$terme}%")
+                ->orWhere('nom', 'like', "%{$terme}%")
+                ->orWhere('email', 'like', "%{$terme}%")
+                ->orWhere('telephone', 'like', "%{$terme}%");
+        });
     }
 }

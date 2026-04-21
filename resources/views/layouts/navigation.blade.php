@@ -20,6 +20,10 @@
                         <x-nav-link :href="route('proprietaire.biens.index')" :active="request()->routeIs('proprietaire.biens.*')">
                             {{ __('Biens') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('proprietaire.locataires.index')" :active="request()->routeIs('proprietaire.locataires.*')">
+                            {{ __('Locataires') }}
+                        </x-nav-link>
                     @else
                         <x-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">
                             {{ __('Tableau de bord') }}
@@ -84,6 +88,10 @@
 
                 <x-responsive-nav-link :href="route('proprietaire.biens.index')" :active="request()->routeIs('proprietaire.biens.*')">
                     {{ __('Biens') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('proprietaire.locataires.index')" :active="request()->routeIs('proprietaire.locataires.*')">
+                    {{ __('Locataires') }}
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('locataire.dashboard')" :active="request()->routeIs('locataire.*')">
