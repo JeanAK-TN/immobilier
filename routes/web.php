@@ -27,8 +27,8 @@ Route::get('/', function () {
         };
     }
 
-    return redirect()->route('login');
-});
+    return view('welcome');
+})->name('home');
 
 // Changement de mot de passe forcé (auth, sans le middleware password.changed)
 Route::middleware('auth')->group(function (): void {
