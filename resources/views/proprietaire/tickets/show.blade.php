@@ -87,8 +87,8 @@
                     </div>
 
                     <div
-                        class="flex flex-col gap-3 overflow-y-auto px-6 py-5"
-                        style="min-height: 240px; max-height: 55vh"
+                        class="flex flex-col gap-3 px-6 py-5 {{ $ticket->messages->count() > 4 ? 'overflow-y-auto' : '' }}"
+                        @if ($ticket->messages->count() > 4) style="max-height: 55vh" @endif
                         x-data
                         x-init="$el.scrollTop = $el.scrollHeight"
                     >
@@ -98,13 +98,27 @@
                             </div>
                         @else
                             @foreach ($ticket->messages as $message)
-                                <article class="rounded-2xl border p-4 {{ $message->est_note_interne ? 'border-amber-200 bg-amber-50' : 'border-gray-200 bg-white' }}">
+                                @php $estLocataire = $message->auteur->isLocataire(); @endphp
+                                <article @class([
+                                    'rounded-2xl border p-4',
+                                    'border-amber-200 bg-amber-50' => $message->est_note_interne,
+                                    'border-blue-100 bg-blue-50' => ! $message->est_note_interne && $estLocataire,
+                                    'border-gray-200 bg-white' => ! $message->est_note_interne && ! $estLocataire,
+                                ])>
                                     <div class="flex flex-wrap items-center justify-between gap-2">
                                         <div class="flex items-center gap-2">
                                             <p class="text-sm font-semibold text-gray-900">{{ $message->auteur->name }}</p>
                                             @if ($message->est_note_interne)
-                                                <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                                                <span class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
                                                     {{ __('Note interne') }}
+                                                </span>
+                                            @else
+                                                <span @class([
+                                                    'rounded-full px-2 py-0.5 text-[10px] font-semibold',
+                                                    'bg-blue-100 text-blue-700' => $estLocataire,
+                                                    'bg-slate-100 text-slate-600' => ! $estLocataire,
+                                                ])>
+                                                    {{ $estLocataire ? __('Locataire') : __('Propriétaire') }}
                                                 </span>
                                             @endif
                                         </div>
