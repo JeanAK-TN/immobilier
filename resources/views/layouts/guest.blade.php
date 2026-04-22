@@ -17,8 +17,13 @@
     <body class="font-sans text-gray-900 antialiased">
         <div class="flex min-h-screen flex-col items-center bg-slate-50 pt-6 sm:justify-center sm:pt-0">
             <div>
-                <a href="/">
-                    <x-application-logo class="h-20 w-20 fill-current text-gray-500" />
+                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2">
+                    <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-sm">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </span>
+                    <span class="text-base font-semibold text-gray-900">{{ config('app.name', 'ImmoPro') }}</span>
                 </a>
             </div>
 

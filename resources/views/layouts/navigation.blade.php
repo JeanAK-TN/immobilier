@@ -5,8 +5,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ Auth::user()->isProprietaire() ? route('proprietaire.dashboard') : route('locataire.dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ Auth::user()->isProprietaire() ? route('proprietaire.dashboard') : route('locataire.dashboard') }}"
+                       class="flex items-center gap-2.5">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+                            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                        </span>
+                        <span class="text-base font-semibold text-gray-900">{{ config('app.name', 'ImmoPro') }}</span>
                     </a>
                 </div>
 
