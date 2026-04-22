@@ -7,6 +7,7 @@ use App\Enums\PrioriteTicket;
 use App\Enums\StatutTicket;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTicketMaintenanceRequest;
+use App\Mail\NouveauTicketMail;
 use App\Models\JournalAudit;
 use App\Models\TicketMaintenance;
 use App\Models\User;
@@ -14,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class TicketMaintenanceController extends Controller
@@ -77,6 +79,11 @@ class TicketMaintenanceController extends Controller
 
             return $ticket;
         });
+
+        $ticket->load('contrat.bien.proprietaire', 'contrat.locataire');
+
+        Mail::to($ticket->contrat->bien->proprietaire->email)
+            ->send(new NouveauTicketMail($ticket));
 
         return redirect()
             ->route('locataire.tickets.show', $ticket)
