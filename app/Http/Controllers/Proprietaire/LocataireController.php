@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Proprietaire;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLocataireRequest;
 use App\Http\Requests\UpdateLocataireRequest;
+use App\Mail\CompteLocataireCreeMail;
 use App\Models\JournalAudit;
 use App\Models\Locataire;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -92,6 +94,8 @@ class LocataireController extends Controller
 
             return $locataire;
         });
+
+        Mail::to($locataire->email)->send(new CompteLocataireCreeMail($locataire, $motDePasseTemporaire));
 
         return redirect()
             ->route('proprietaire.locataires.show', $locataire)
