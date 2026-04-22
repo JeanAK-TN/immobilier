@@ -2,13 +2,18 @@
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-900">
-                    {{ __('Tickets de maintenance') }}
-                </h2>
-                <p class="mt-1 text-sm text-gray-500">
-                    {{ __('Signalez un incident, suivez son statut et échangez avec votre propriétaire.') }}
-                </p>
+                <h2 class="text-xl font-semibold leading-tight text-gray-900">{{ __('Tickets de maintenance') }}</h2>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Signalez un incident, suivez son statut et échangez avec votre propriétaire.') }}</p>
             </div>
+            @if ($contratActif)
+                <button
+                    type="button"
+                    x-on:click="createOpen = !createOpen"
+                    class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 self-start sm:self-auto"
+                >
+                    <span x-text="createOpen ? '✕ Annuler' : '+ Nouveau ticket'"></span>
+                </button>
+            @endif
         </div>
     </x-slot>
 
@@ -16,7 +21,7 @@
         class="py-8"
         x-data="{ createOpen: {{ ($tickets->isEmpty() && $contratActif) ? 'true' : 'false' }} }"
     >
-        <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl space-y-5 px-4 sm:px-6 lg:px-8">
 
             @if (session('status'))
                 <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3.5 text-sm font-medium text-green-800">
@@ -24,35 +29,37 @@
                 </div>
             @endif
 
-            {{-- Barre d'actions : titre de la liste + bouton toggle --}}
-            <div class="flex items-center justify-between gap-4">
-                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                    {{ __('Mes tickets') }}
-                    @if ($tickets->total() > 0)
-                        <span class="ml-2 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ $tickets->total() }}</span>
+            {{-- Contrat actif --}}
+            @if ($contratActif)
+                <div class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                        <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-semibold text-gray-900">{{ $contratActif->bien->nom }}</p>
+                        <p class="truncate text-xs text-gray-400">{{ $contratActif->bien->adresse }}, {{ $contratActif->bien->ville }}</p>
+                    </div>
+                    @if ($ticketsActifsContratCount > 0)
+                        <span class="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                            {{ $ticketsActifsContratCount }} actif{{ $ticketsActifsContratCount > 1 ? 's' : '' }}
+                        </span>
+                    @else
+                        <span class="shrink-0 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                            {{ __('Aucun incident actif') }}
+                        </span>
                     @endif
-                </p>
-
-                @if ($contratActif)
-                    <button
-                        type="button"
-                        @click="createOpen = !createOpen"
-                        class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
-                    >
-                        <span x-text="createOpen ? '✕ Annuler' : '+ Nouveau ticket'"></span>
-                    </button>
-                @endif
-            </div>
+                </div>
+            @endif
 
             {{-- Formulaire de création (collapsible) --}}
             @if ($contratActif)
                 <div x-show="createOpen" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
                     <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                        <div class="mb-5 flex items-center justify-between gap-3">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-900">{{ __('Nouveau ticket') }}</h3>
-                                <p class="mt-1 text-sm text-gray-500">{{ __('Décrivez clairement le problème rencontré et ajoutez des photos si nécessaire.') }}</p>
-                            </div>
+                        <div class="mb-5">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Nouveau ticket') }}</h3>
+                            <p class="mt-1 text-sm text-gray-500">{{ __('Décrivez clairement le problème rencontré et ajoutez des photos si nécessaire.') }}</p>
                         </div>
 
                         <form
@@ -122,7 +129,7 @@
 
                             <div class="sm:col-span-2 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-4">
                                 <x-primary-button>{{ __('Créer le ticket') }}</x-primary-button>
-                                <button type="button" @click="createOpen = false" class="text-sm text-gray-500 hover:text-gray-700">
+                                <button type="button" x-on:click="createOpen = false" class="text-sm text-gray-500 hover:text-gray-700">
                                     {{ __('Annuler') }}
                                 </button>
                             </div>
@@ -131,106 +138,109 @@
                 </div>
             @endif
 
-            {{-- Contenu principal : filtres + liste --}}
-            <div class="grid gap-6 xl:grid-cols-[minmax(240px,0.28fr)_minmax(0,1fr)]">
+            {{-- Filtres : onglets statut + recherche --}}
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                {{-- Onglets statut --}}
+                <div class="flex flex-wrap gap-1.5">
+                    <a
+                        href="{{ route('locataire.tickets.index', array_filter(['recherche' => $filtres['recherche']])) }}"
+                        @class([
+                            'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                            'bg-gray-900 text-white' => $filtres['statut'] === '',
+                            'bg-gray-100 text-gray-600 hover:bg-gray-200' => $filtres['statut'] !== '',
+                        ])
+                    >{{ __('Tous') }}
+                        @if ($tickets->total() > 0 && $filtres['statut'] === '')
+                            <span class="ml-1 opacity-60">{{ $tickets->total() }}</span>
+                        @endif
+                    </a>
+                    @foreach ($statutOptions as $opt)
+                        <a
+                            href="{{ route('locataire.tickets.index', array_filter(['statut' => $opt->value, 'recherche' => $filtres['recherche']])) }}"
+                            @class([
+                                'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                                'bg-gray-900 text-white' => $filtres['statut'] === $opt->value,
+                                'bg-gray-100 text-gray-600 hover:bg-gray-200' => $filtres['statut'] !== $opt->value,
+                            ])
+                        >{{ $opt->label() }}</a>
+                    @endforeach
+                </div>
 
-                {{-- Sidebar : contrat + filtres --}}
-                <aside class="grid gap-4 content-start">
-                    @if ($contratActif)
-                        <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Contrat actif') }}</p>
-                            <p class="mt-2 font-semibold text-gray-900">{{ $contratActif->bien->nom }}</p>
-                            <p class="mt-0.5 text-xs text-gray-500">{{ $contratActif->bien->adresse }}, {{ $contratActif->bien->ville }}</p>
-                            <div class="mt-3 flex items-center gap-2">
-                                <span class="inline-block h-2 w-2 rounded-full bg-emerald-400"></span>
-                                <span class="text-xs text-gray-500">{{ $ticketsActifsContratCount }} {{ __('ticket(s) actif(s)') }}</span>
-                            </div>
-                        </section>
+                {{-- Recherche --}}
+                <form method="GET" action="{{ route('locataire.tickets.index') }}" class="flex items-center gap-2">
+                    @if ($filtres['statut'])
+                        <input type="hidden" name="statut" value="{{ $filtres['statut'] }}">
                     @endif
-
-                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Filtres') }}</p>
-
-                        <form method="GET" action="{{ route('locataire.tickets.index') }}" class="mt-4 grid gap-3">
-                            <div>
-                                <x-input-label for="recherche" :value="__('Recherche')" />
-                                <x-text-input id="recherche" name="recherche" type="text" class="mt-1 block w-full" :value="$filtres['recherche']" placeholder="{{ __('Titre...') }}" />
-                            </div>
-
-                            <div>
-                                <x-input-label for="statut" :value="__('Statut')" />
-                                <select id="statut" name="statut" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="">{{ __('Tous') }}</option>
-                                    @foreach ($statutOptions as $statutOption)
-                                        <option value="{{ $statutOption->value }}" @selected($filtres['statut'] === $statutOption->value)>
-                                            {{ $statutOption->label() }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="flex flex-wrap gap-2 pt-1">
-                                <x-primary-button class="flex-1 justify-center">{{ __('Filtrer') }}</x-primary-button>
-                                <a
-                                    href="{{ route('locataire.tickets.index') }}"
-                                    class="inline-flex flex-1 items-center justify-center rounded-md border border-gray-300 px-3 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50"
-                                >
-                                    {{ __('Réinit.') }}
-                                </a>
-                            </div>
-                        </form>
-                    </section>
-                </aside>
-
-                {{-- Liste des tickets --}}
-                <section class="grid gap-4 content-start">
-                    @if (! $contratActif && $tickets->isEmpty())
-                        <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
-                            <p class="text-3xl text-gray-200">🔧</p>
-                            <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun contrat actif') }}</h3>
-                            <p class="mt-2 text-sm text-gray-500">{{ __('Vous devez disposer d\'un contrat actif pour créer un ticket de maintenance.') }}</p>
-                        </div>
-                    @elseif ($tickets->isEmpty())
-                        <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
-                            <p class="text-3xl text-gray-200">✅</p>
-                            <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket') }}</h3>
-                            <p class="mt-2 text-sm text-gray-500">{{ __('Aucun ticket ne correspond à votre recherche.') }}</p>
-                        </div>
-                    @else
-                        @foreach ($tickets as $ticket)
-                            <a
-                                href="{{ route('locataire.tickets.show', $ticket) }}"
-                                class="group flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-gray-300"
-                            >
-                                <div class="flex items-start justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <p class="truncate font-semibold text-gray-900 group-hover:text-gray-700">{{ $ticket->titre }}</p>
-                                        <p class="mt-0.5 text-xs text-gray-400">{{ $ticket->contrat->bien->nom }}</p>
-                                    </div>
-                                    <x-tickets.status-badge :status="$ticket->statut" />
-                                </div>
-
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <x-tickets.priority-badge :priority="$ticket->priorite" />
-                                    <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">{{ $ticket->categorie->label() }}</span>
-                                </div>
-
-                                <div class="flex items-center justify-between gap-3 border-t border-gray-100 pt-3 text-xs text-gray-400">
-                                    <span>{{ $ticket->created_at->translatedFormat('d M Y') }}</span>
-                                    <span class="flex items-center gap-1">
-                                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" /></svg>
-                                        {{ $ticket->messages_count }} {{ __('msg') }}
-                                    </span>
-                                </div>
-                            </a>
-                        @endforeach
-
-                        <div>
-                            {{ $tickets->links() }}
-                        </div>
+                    <x-text-input
+                        name="recherche"
+                        type="text"
+                        class="block w-44 text-sm"
+                        :value="$filtres['recherche']"
+                        placeholder="{{ __('Rechercher…') }}"
+                    />
+                    <x-primary-button class="py-2">{{ __('OK') }}</x-primary-button>
+                    @if ($filtres['recherche'])
+                        <a href="{{ route('locataire.tickets.index', array_filter(['statut' => $filtres['statut']])) }}" class="text-xs text-gray-400 hover:text-gray-600">✕</a>
                     @endif
-                </section>
+                </form>
             </div>
+
+            {{-- Liste --}}
+            @if (! $contratActif && $tickets->isEmpty())
+                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
+                    <p class="text-3xl text-gray-200">🔧</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun contrat actif') }}</h3>
+                    <p class="mt-2 text-sm text-gray-500">{{ __('Vous devez disposer d\'un contrat actif pour créer un ticket de maintenance.') }}</p>
+                </div>
+            @elseif ($tickets->isEmpty())
+                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
+                    <p class="text-3xl text-gray-200">✅</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket') }}</h3>
+                    <p class="mt-2 text-sm text-gray-500">{{ __('Aucun ticket ne correspond à votre recherche.') }}</p>
+                </div>
+            @else
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm divide-y divide-gray-100">
+                    @foreach ($tickets as $ticket)
+                        <a
+                            href="{{ route('locataire.tickets.show', $ticket) }}"
+                            class="group flex items-center gap-4 px-5 py-4 transition hover:bg-slate-50"
+                        >
+                            {{-- Indicateur priorité --}}
+                            <span @class([
+                                'shrink-0 h-2 w-2 rounded-full',
+                                'bg-red-400' => $ticket->priorite->value === 'haute',
+                                'bg-amber-400' => $ticket->priorite->value === 'moyenne',
+                                'bg-gray-300' => $ticket->priorite->value === 'basse',
+                            ])></span>
+
+                            {{-- Titre + méta --}}
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-semibold text-gray-900 group-hover:text-gray-700">{{ $ticket->titre }}</p>
+                                <p class="mt-0.5 text-xs text-gray-400">
+                                    {{ $ticket->categorie->label() }}
+                                    @if ($ticket->messages_count > 0)
+                                        · {{ $ticket->messages_count }} msg
+                                    @endif
+                                    · {{ $ticket->updated_at->diffForHumans() }}
+                                </p>
+                            </div>
+
+                            {{-- Statut --}}
+                            <div class="shrink-0 hidden sm:block">
+                                <x-tickets.status-badge :status="$ticket->statut" />
+                            </div>
+
+                            {{-- Flèche --}}
+                            <svg class="h-4 w-4 shrink-0 text-gray-300 group-hover:text-gray-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @endforeach
+                </div>
+
+                <div>{{ $tickets->links() }}</div>
+            @endif
+
         </div>
     </div>
 </x-app-layout>
