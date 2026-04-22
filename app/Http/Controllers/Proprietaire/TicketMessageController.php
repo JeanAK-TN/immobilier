@@ -28,7 +28,7 @@ class TicketMessageController extends Controller
         return redirect()
             ->route('proprietaire.tickets.show', $ticket)
             ->with('status', $estNoteInterne
-                ? 'La note interne a bien ete ajoutee.'
-                : 'La reponse a bien ete ajoutee.');
+                ? 'La note interne a bien été ajoutée.'
+                : 'La réponse a bien été ajoutée.');
     }
 }
