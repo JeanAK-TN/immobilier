@@ -30,7 +30,14 @@
 
             {{-- Filtres --}}
             <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                <form method="GET" action="{{ route('proprietaire.contrats.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+                <form
+                    method="GET"
+                    action="{{ route('proprietaire.contrats.index') }}"
+                    x-data
+                    @change="$root.submit()"
+                    @input.debounce.500ms="$root.submit()"
+                    class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end"
+                >
                     <div class="grid gap-2 sm:col-span-2 lg:col-span-2">
                         <x-input-label for="recherche" :value="__('Recherche')" />
                         <x-text-input
@@ -80,7 +87,7 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-3 sm:col-span-2 lg:col-span-5">
-                        <x-primary-button>{{ __('Filtrer') }}</x-primary-button>
+                        <button type="submit" class="hidden" tabindex="-1" aria-hidden="true">{{ __('Filtrer') }}</button>
                         <a
                             href="{{ route('proprietaire.contrats.index') }}"
                             class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50"

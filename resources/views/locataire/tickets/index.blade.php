@@ -166,7 +166,13 @@
                 </div>
 
                 {{-- Recherche --}}
-                <form method="GET" action="{{ route('locataire.tickets.index') }}" class="flex items-center gap-2">
+                <form
+                    method="GET"
+                    action="{{ route('locataire.tickets.index') }}"
+                    x-data
+                    @input.debounce.500ms="$root.submit()"
+                    class="flex items-center gap-2"
+                >
                     @if ($filtres['statut'])
                         <input type="hidden" name="statut" value="{{ $filtres['statut'] }}">
                     @endif
@@ -177,7 +183,7 @@
                         :value="$filtres['recherche']"
                         placeholder="{{ __('Rechercher…') }}"
                     />
-                    <x-primary-button class="py-2">{{ __('OK') }}</x-primary-button>
+                    <button type="submit" class="hidden" tabindex="-1" aria-hidden="true">{{ __('OK') }}</button>
                     @if ($filtres['recherche'])
                         <a href="{{ route('locataire.tickets.index', array_filter(['statut' => $filtres['statut']])) }}" class="text-xs text-gray-400 hover:text-gray-600">✕</a>
                     @endif

@@ -54,7 +54,13 @@
 
             {{-- Filtres complémentaires --}}
             <section class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                <form method="GET" action="{{ route('proprietaire.tickets.index') }}">
+                <form
+                    method="GET"
+                    action="{{ route('proprietaire.tickets.index') }}"
+                    x-data
+                    @change="$root.submit()"
+                    @input.debounce.500ms="$root.submit()"
+                >
                     @if ($filtres['statut'])
                         <input type="hidden" name="statut" value="{{ $filtres['statut'] }}">
                     @endif
@@ -97,7 +103,7 @@
                             @endforeach
                         </select>
 
-                        <x-primary-button>{{ __('Filtrer') }}</x-primary-button>
+                        <button type="submit" class="hidden" tabindex="-1" aria-hidden="true">{{ __('Filtrer') }}</button>
 
                         @if (array_filter([$filtres['recherche'], $filtres['statut'], $filtres['priorite'], $filtres['categorie'], $filtres['bienId'], $filtres['locataireId']]))
                             <a href="{{ route('proprietaire.tickets.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
