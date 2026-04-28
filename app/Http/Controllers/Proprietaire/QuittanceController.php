@@ -7,6 +7,7 @@ use App\Models\Contrat;
 use App\Models\JournalAudit;
 use App\Models\Paiement;
 use App\Models\Quittance;
+use App\Notifications\QuittanceGenereeNotification;
 use App\QuittancePdfBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -90,6 +91,12 @@ class QuittanceController extends Controller
 
             return $quittance;
         });
+
+        $quittance->load('contrat.locataire.user');
+        $locataireUser = $quittance->contrat->locataire->user ?? null;
+        if ($locataireUser) {
+            $locataireUser->notify(new QuittanceGenereeNotification($quittance));
+        }
 
         return redirect()
             ->route('proprietaire.paiements.show', $paiement)

@@ -42,6 +42,11 @@
                                     {{ $header }}
                                 </div>
                             @endisset
+
+                            <x-notifications.bell
+                                :count="$notificationsNonLuesCount ?? 0"
+                                :recentes="$notificationsRecentes ?? collect()"
+                            />
                         </header>
 
                         <main class="flex-1">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Locataire\PaiementController as LocatairePaiementContro
 use App\Http\Controllers\Locataire\QuittanceController as LocataireQuittanceController;
 use App\Http\Controllers\Locataire\TicketMaintenanceController as LocataireTicketMaintenanceController;
 use App\Http\Controllers\Locataire\TicketMessageController as LocataireTicketMessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordChangeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proprietaire\BienController;
@@ -41,6 +42,10 @@ Route::middleware(['auth', 'password.changed'])->group(function (): void {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/lire', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/lire-toutes', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
     // Espace propriétaire
     Route::middleware('role:proprietaire')

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTicketMessageRequest;
 use App\Models\JournalAudit;
 use App\Models\TicketMaintenance;
+use App\Notifications\MessageTicketEnvoyeNotification;
 use Illuminate\Http\RedirectResponse;
 
 class TicketMessageController extends Controller
@@ -22,6 +23,11 @@ class TicketMessageController extends Controller
             'ticket_id' => $ticket->id,
             'est_note_interne' => false,
         ]);
+
+        $ticket->load('contrat.bien.proprietaire');
+        $ticket->contrat->bien->proprietaire->notify(
+            new MessageTicketEnvoyeNotification($ticket, $request->user())
+        );
 
         return redirect()
             ->route('locataire.tickets.show', $ticket)

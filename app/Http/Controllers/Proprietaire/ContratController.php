@@ -11,6 +11,7 @@ use App\Models\Contrat;
 use App\Models\JournalAudit;
 use App\Models\Locataire;
 use App\Models\User;
+use App\Notifications\ContratAttribueNotification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -94,6 +95,11 @@ class ContratController extends Controller
 
             return $contrat;
         });
+
+        $contrat->load('bien', 'locataire.user');
+        if ($contrat->locataire?->user) {
+            $contrat->locataire->user->notify(new ContratAttribueNotification($contrat));
+        }
 
         return redirect()
             ->route('proprietaire.contrats.show', $contrat)

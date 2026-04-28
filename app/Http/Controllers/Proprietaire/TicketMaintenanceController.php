@@ -11,6 +11,7 @@ use App\Models\Bien;
 use App\Models\JournalAudit;
 use App\Models\Locataire;
 use App\Models\TicketMaintenance;
+use App\Notifications\TicketStatutChangeNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -72,6 +73,8 @@ class TicketMaintenanceController extends Controller
 
     public function update(UpdateTicketMaintenanceStatusRequest $request, TicketMaintenance $ticket): RedirectResponse
     {
+        $ancienStatut = $ticket->statut;
+
         $ticket->update([
             'statut' => $request->validated('statut'),
         ]);
@@ -79,6 +82,15 @@ class TicketMaintenanceController extends Controller
         JournalAudit::enregistrer('changement_statut_ticket', $ticket, [
             'statut' => $ticket->statut->value,
         ]);
+
+        if ($ancienStatut !== $ticket->statut) {
+            $ticket->load('contrat.locataire.user');
+            $locataireUser = $ticket->contrat->locataire->user ?? null;
+
+            if ($locataireUser) {
+                $locataireUser->notify(new TicketStatutChangeNotification($ticket, $ancienStatut));
+            }
+        }
 
         return redirect()
             ->route('proprietaire.tickets.show', $ticket)

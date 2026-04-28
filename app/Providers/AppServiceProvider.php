@@ -22,12 +22,14 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configurerRateLimiters();
 
-        View::composer(['layouts.navigation', 'layouts.sidebar-proprietaire'], function ($view): void {
+        View::composer(['layouts.navigation', 'layouts.sidebar-proprietaire', 'layouts.app'], function ($view): void {
             $user = auth()->user();
 
             if (! $user) {
                 $view->with('ticketsActifsCount', 0)
-                    ->with('contratsEnAttenteCount', 0);
+                    ->with('contratsEnAttenteCount', 0)
+                    ->with('notificationsNonLuesCount', 0)
+                    ->with('notificationsRecentes', collect());
 
                 return;
             }
@@ -40,8 +42,13 @@ class AppServiceProvider extends ServiceProvider
                 ? Contrat::query()->pourProprietaire($user)->where('statut', StatutContrat::EnAttente)->count()
                 : 0;
 
+            $notificationsNonLuesCount = $user->unreadNotifications()->count();
+            $notificationsRecentes = $user->notifications()->latest()->limit(5)->get();
+
             $view->with('ticketsActifsCount', $ticketsActifsCount)
-                ->with('contratsEnAttenteCount', $contratsEnAttenteCount);
+                ->with('contratsEnAttenteCount', $contratsEnAttenteCount)
+                ->with('notificationsNonLuesCount', $notificationsNonLuesCount)
+                ->with('notificationsRecentes', $notificationsRecentes);
         });
     }
 

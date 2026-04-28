@@ -11,6 +11,7 @@ use App\Mail\NouveauTicketMail;
 use App\Models\JournalAudit;
 use App\Models\TicketMaintenance;
 use App\Models\User;
+use App\Notifications\TicketCreeNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -86,6 +87,8 @@ class TicketMaintenanceController extends Controller
 
         Mail::to($ticket->contrat->bien->proprietaire->email)
             ->send(new NouveauTicketMail($ticket));
+
+        $ticket->contrat->bien->proprietaire->notify(new TicketCreeNotification($ticket));
 
         return redirect()
             ->route('locataire.tickets.show', $ticket)

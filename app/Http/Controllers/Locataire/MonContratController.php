@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SignerContratRequest;
 use App\Models\Contrat;
 use App\Models\JournalAudit;
+use App\Notifications\ContratSigneNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,8 @@ class MonContratController extends Controller
                 'signe_ip' => $contrat->signe_ip,
             ]);
         });
+
+        $contrat->bien->proprietaire->notify(new ContratSigneNotification($contrat));
 
         return redirect()
             ->route('locataire.contrat.show')

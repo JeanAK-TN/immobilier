@@ -8,6 +8,7 @@ use App\Enums\StatutPaiement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSimulatedPaiementRequest;
 use App\Models\Paiement;
+use App\Notifications\PaiementEnregistreNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -61,6 +62,9 @@ class PaiementController extends Controller
             'statut' => StatutPaiement::SimuleReussi,
             'notes' => 'Paiement simulé - aucune transaction réelle.',
         ]);
+
+        $paiement->load('contrat.bien.proprietaire', 'contrat.locataire');
+        $paiement->contrat->bien->proprietaire->notify(new PaiementEnregistreNotification($paiement));
 
         $redirect = redirect()
             ->route('locataire.paiements.show', $paiement)
