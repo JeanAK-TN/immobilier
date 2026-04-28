@@ -81,27 +81,27 @@
 
                         <dl class="mt-5 grid gap-5 md:grid-cols-2">
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $bien->adresse }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Ville') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Ville') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $bien->ville }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Pays') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Pays') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $bien->pays }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $bien->created_at->translatedFormat('d F Y') }}</dd>
                             </div>
 
                             <div class="md:col-span-2">
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Description') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Description') }}</dt>
                                 <dd class="mt-1.5 text-sm leading-6 text-gray-700">
                                     {{ $bien->description ?: __('Aucune description renseignée pour le moment.') }}
                                 </dd>
@@ -158,17 +158,17 @@
                         @if ($contratActif)
                             <div class="mt-5 grid gap-4 rounded-2xl bg-amber-50 p-5 text-sm text-amber-900">
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-amber-600">{{ __('Contrat actif') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-amber-600">{{ __('Contrat actif') }}</p>
                                     <p class="mt-1.5 font-semibold">{{ __('Oui') }}</p>
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-amber-600">{{ __('Locataire') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-amber-600">{{ __('Locataire') }}</p>
                                     <p class="mt-1.5 font-semibold">{{ $contratActif->locataire->nomComplet() }}</p>
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-amber-600">{{ __('Début du contrat') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-amber-600">{{ __('Début du contrat') }}</p>
                                     <p class="mt-1.5 font-semibold">{{ $contratActif->date_debut->translatedFormat('d F Y') }}</p>
                                 </div>
                             </div>

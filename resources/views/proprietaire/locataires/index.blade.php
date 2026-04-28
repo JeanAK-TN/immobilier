@@ -53,7 +53,7 @@
 
                         <div class="grid gap-2">
                             <x-input-label for="statut_compte" :value="__('Statut du compte')" />
-                            <select id="statut_compte" name="statut_compte" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <select id="statut_compte" name="statut_compte" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                                 <option value="">{{ __('Tous les comptes') }}</option>
                                 <option value="actif" @selected($filtres['statutCompte'] === 'actif')>{{ __('Actifs') }}</option>
                                 <option value="inactif" @selected($filtres['statutCompte'] === 'inactif')>{{ __('Inactifs') }}</option>

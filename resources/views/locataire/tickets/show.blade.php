@@ -38,7 +38,7 @@
 
                     {{-- Description --}}
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Description') }}</p>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Description') }}</p>
                         <p class="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-700">{{ $ticket->description }}</p>
 
                         @if ($ticket->piecesJointes->isNotEmpty())
@@ -56,16 +56,16 @@
                     {{-- Métadonnées --}}
                     <dl class="grid gap-4 border-t border-gray-100 pt-4 text-sm lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
                             <dd class="mt-1 font-semibold text-gray-900">{{ $ticket->contrat->bien->nom }}</dd>
                             <dd class="text-xs text-gray-500">{{ $ticket->contrat->bien->adresse }}, {{ $ticket->contrat->bien->ville }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
                             <dd class="mt-1 text-gray-700">{{ $ticket->created_at->translatedFormat('d F Y à H:i') }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Mis à jour') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Mis à jour') }}</dt>
                             <dd class="mt-1 text-gray-700">{{ $ticket->updated_at->translatedFormat('d F Y à H:i') }}</dd>
                         </div>
                     </dl>
@@ -125,7 +125,7 @@
                                     id="message"
                                     name="message"
                                     rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                     placeholder="{{ __('Écrivez votre réponse…') }}"
                                     required
                                 >{{ old('message') }}</textarea>

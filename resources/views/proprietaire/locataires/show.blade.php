@@ -59,12 +59,12 @@
 
                     <dl class="mt-5 grid gap-4 md:grid-cols-2">
                         <div class="rounded-xl bg-white px-4 py-4 shadow-sm">
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse e-mail') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Adresse e-mail') }}</dt>
                             <dd class="mt-1.5 text-sm font-semibold text-gray-900">{{ session('identifiants_locataire.email') }}</dd>
                         </div>
 
                         <div class="rounded-xl bg-white px-4 py-4 shadow-sm">
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Mot de passe temporaire') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Mot de passe temporaire') }}</dt>
                             <dd class="mt-1.5 font-mono text-sm font-semibold text-gray-900">{{ session('identifiants_locataire.mot_de_passe_temporaire') }}</dd>
                         </div>
                     </dl>
@@ -78,32 +78,32 @@
 
                         <dl class="mt-5 grid gap-5 md:grid-cols-2">
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Prénom') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Prénom') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->prenom }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Nom') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Nom') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->nom }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse e-mail') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Adresse e-mail') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->email }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Téléphone') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Téléphone') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->telephone ?: __('Non renseigné') }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->created_at->translatedFormat('d F Y') }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Compte utilisateur') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Compte utilisateur') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $locataire->user->name }}</dd>
                             </div>
                         </dl>
@@ -132,14 +132,14 @@
 
                         <div class="mt-5 grid gap-4 rounded-xl bg-slate-50 p-5 text-sm">
                             <div>
-                                <p class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('État du compte') }}</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('État du compte') }}</p>
                                 <p class="mt-1.5 font-semibold text-gray-900">
                                     {{ $locataire->compteActif() ? __('Actif') : __('Inactif') }}
                                 </p>
                             </div>
 
                             <div>
-                                <p class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Première connexion') }}</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Première connexion') }}</p>
                                 <p class="mt-1.5 font-semibold text-gray-900">
                                     {{ $locataire->user->must_change_password ? __('Mot de passe encore à changer') : __('Déjà effectuée') }}
                                 </p>

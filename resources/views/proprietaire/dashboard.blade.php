@@ -11,7 +11,7 @@
             {{-- En-tête de bienvenue --}}
             <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p class="text-xs font-medium uppercase tracking-wider text-gray-400">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">
                         {{ ucfirst(now()->translatedFormat('l d F Y')) }}
                     </p>
                     <h1 class="mt-1 text-2xl font-bold text-gray-900">

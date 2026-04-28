@@ -79,7 +79,7 @@
                         type="checkbox"
                         name="is_active"
                         value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        class="rounded border-gray-300 text-gray-900 shadow-sm focus:ring-gray-500"
                         @checked(old('is_active', $locataire->user?->is_active))
                     >
                     {{ __('Compte actif') }}

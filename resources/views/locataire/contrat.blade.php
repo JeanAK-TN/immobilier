@@ -1,13 +1,32 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-900">
-                    {{ __('Mon contrat') }}
-                </h2>
-                <p class="mt-1 text-sm text-gray-500">
-                    {{ __('Consultez votre bail, téléchargez le PDF et signez-le si nécessaire.') }}
-                </p>
+                @if ($contrat)
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200">
+                            {{ $contrat->statut->label() }}
+                        </span>
+
+                        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-200">
+                            {{ $contrat->signatureLabel() }}
+                        </span>
+                    </div>
+
+                    <h2 class="mt-3 text-xl font-semibold leading-tight text-gray-900">
+                        {{ __('Mon contrat : :bien', ['bien' => $contrat->bien->nom]) }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">
+                        {{ $contrat->bien->adresse }}, {{ $contrat->bien->ville }}
+                    </p>
+                @else
+                    <h2 class="text-xl font-semibold leading-tight text-gray-900">
+                        {{ __('Mon contrat') }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500">
+                        {{ __('Consultez votre bail, téléchargez le PDF et signez-le si nécessaire.') }}
+                    </p>
+                @endif
             </div>
 
             <a
@@ -39,26 +58,16 @@
                 <div class="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
                     <section class="grid gap-6 content-start">
                         <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200">
-                                    {{ $contrat->statut->label() }}
-                                </span>
-
-                                <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-200">
-                                    {{ $contrat->signatureLabel() }}
-                                </span>
-                            </div>
-
-                            <h3 class="mt-5 text-lg font-semibold text-gray-900">{{ __('Informations principales') }}</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Informations principales') }}</h3>
 
                             <dl class="mt-5 grid gap-5 md:grid-cols-2">
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
                                     <dd class="mt-1.5 text-sm font-semibold text-gray-900">{{ $contrat->bien->nom }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Adresse') }}</dt>
                                     <dd class="mt-1.5 text-sm text-gray-700">
                                         {{ $contrat->bien->adresse }}<br>
                                         {{ $contrat->bien->ville }}, {{ $contrat->bien->pays }}
@@ -66,22 +75,22 @@
                                 </div>
 
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Date de début') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Date de début') }}</dt>
                                     <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->date_debut->translatedFormat('d F Y') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Date de fin') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Date de fin') }}</dt>
                                     <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->date_fin?->translatedFormat('d F Y') ?? __('Non définie') }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Jour de paiement') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Jour de paiement') }}</dt>
                                     <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->jour_paiement }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Reconduction automatique') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Reconduction automatique') }}</dt>
                                     <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->reconduction_auto ? __('Oui') : __('Non') }}</dd>
                                 </div>
                             </dl>
@@ -149,17 +158,17 @@
                             @if ($contrat->isSigne())
                                 <div class="mt-5 grid gap-4 rounded-2xl bg-emerald-50 p-5 text-sm text-emerald-900">
                                     <div>
-                                        <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Nom du signataire') }}</p>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Nom du signataire') }}</p>
                                         <p class="mt-1.5 font-semibold">{{ $contrat->signe_nom }}</p>
                                     </div>
 
                                     <div>
-                                        <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Date de signature') }}</p>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Date de signature') }}</p>
                                         <p class="mt-1.5 font-semibold">{{ $contrat->signe_le?->translatedFormat('d F Y H:i') }}</p>
                                     </div>
 
                                     <div>
-                                        <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Adresse IP enregistrée') }}</p>
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Adresse IP enregistrée') }}</p>
                                         <p class="mt-1.5 font-mono text-xs font-semibold">{{ $contrat->signe_ip }}</p>
                                     </div>
                                 </div>

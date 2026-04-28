@@ -52,7 +52,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="statut" :value="__('Statut')" />
-                        <select id="statut" name="statut" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="statut" name="statut" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les statuts') }}</option>
                             @foreach ($statutOptions as $statutOption)
                                 <option value="{{ $statutOption->value }}" @selected($filtres['statut'] === $statutOption->value)>
@@ -64,7 +64,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="bien_id" :value="__('Bien')" />
-                        <select id="bien_id" name="bien_id" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="bien_id" name="bien_id" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les biens') }}</option>
                             @foreach ($biens as $bien)
                                 <option value="{{ $bien->id }}" @selected($filtres['bienId'] === (string) $bien->id)>
@@ -76,7 +76,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="locataire_id" :value="__('Locataire')" />
-                        <select id="locataire_id" name="locataire_id" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="locataire_id" name="locataire_id" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les locataires') }}</option>
                             @foreach ($locataires as $locataire)
                                 <option value="{{ $locataire->id }}" @selected($filtres['locataireId'] === (string) $locataire->id)>

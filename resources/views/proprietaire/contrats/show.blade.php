@@ -53,7 +53,7 @@
 
                         <dl class="mt-5 grid gap-5 md:grid-cols-2">
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
                                 <dd class="mt-1.5 text-sm">
                                     <a href="{{ route('proprietaire.biens.show', $contrat->bien) }}" class="font-semibold text-gray-900 hover:text-gray-700 hover:underline underline-offset-2">
                                         {{ $contrat->bien->nom }}
@@ -62,7 +62,7 @@
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</dt>
                                 <dd class="mt-1.5 text-sm">
                                     <a href="{{ route('proprietaire.locataires.show', $contrat->locataire) }}" class="font-semibold text-gray-900 hover:text-gray-700 hover:underline underline-offset-2">
                                         {{ $contrat->locataire->nomComplet() }}
@@ -71,24 +71,24 @@
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Date de début') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Date de début') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->date_debut->translatedFormat('d F Y') }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Date de fin') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Date de fin') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">
                                     {{ $contrat->date_fin?->translatedFormat('d F Y') ?? __('Non définie') }}
                                 </dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Jour de paiement') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Jour de paiement') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->jour_paiement }}</dd>
                             </div>
 
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Reconduction automatique') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Reconduction automatique') }}</dt>
                                 <dd class="mt-1.5 text-sm text-gray-700">{{ $contrat->reconduction_auto ? __('Oui') : __('Non') }}</dd>
                             </div>
                         </dl>
@@ -199,17 +199,17 @@
                         @if ($contrat->isSigne())
                             <div class="mt-5 grid gap-4 rounded-2xl bg-emerald-50 p-5 text-sm text-emerald-900">
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Nom du signataire') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Nom du signataire') }}</p>
                                     <p class="mt-1.5 font-semibold">{{ $contrat->signe_nom }}</p>
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Date de signature') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Date de signature') }}</p>
                                     <p class="mt-1.5 font-semibold">{{ $contrat->signe_le?->translatedFormat('d F Y H:i') }}</p>
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-medium uppercase tracking-wider text-emerald-600">{{ __('Adresse IP') }}</p>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">{{ __('Adresse IP') }}</p>
                                     <p class="mt-1.5 font-mono text-xs font-semibold">{{ $contrat->signe_ip }}</p>
                                 </div>
                             </div>

@@ -77,7 +77,7 @@
 
                             <div>
                                 <x-input-label for="categorie" :value="__('Catégorie')" />
-                                <select id="categorie" name="categorie" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <select id="categorie" name="categorie" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                                     @foreach ($categorieOptions as $categorieOption)
                                         <option value="{{ $categorieOption->value }}" @selected(old('categorie', $categorieOptions[0]->value) === $categorieOption->value)>
                                             {{ $categorieOption->label() }}
@@ -89,7 +89,7 @@
 
                             <div>
                                 <x-input-label for="priorite" :value="__('Priorité')" />
-                                <select id="priorite" name="priorite" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <select id="priorite" name="priorite" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                                     @foreach ($prioriteOptions as $prioriteOption)
                                         <option value="{{ $prioriteOption->value }}" @selected(old('priorite', $prioriteOptions[1]->value ?? $prioriteOptions[0]->value) === $prioriteOption->value)>
                                             {{ $prioriteOption->label() }}
@@ -105,7 +105,7 @@
                                     id="description"
                                     name="description"
                                     rows="4"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                     required
                                 >{{ old('description') }}</textarea>
                                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
@@ -192,17 +192,17 @@
 
             {{-- Liste --}}
             @if (! $contratActif && $tickets->isEmpty())
-                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
-                    <p class="text-3xl text-gray-200">🔧</p>
+                <section class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
+                    <p class="text-4xl text-gray-300">🔧</p>
                     <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun contrat actif') }}</h3>
                     <p class="mt-2 text-sm text-gray-500">{{ __('Vous devez disposer d\'un contrat actif pour créer un ticket de maintenance.') }}</p>
-                </div>
+                </section>
             @elseif ($tickets->isEmpty())
-                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
-                    <p class="text-3xl text-gray-200">✅</p>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket') }}</h3>
+                <section class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
+                    <p class="text-4xl text-gray-300">✅</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket trouvé') }}</h3>
                     <p class="mt-2 text-sm text-gray-500">{{ __('Aucun ticket ne correspond à votre recherche.') }}</p>
-                </div>
+                </section>
             @else
                 <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm divide-y divide-gray-100">
                     @foreach ($tickets as $ticket)

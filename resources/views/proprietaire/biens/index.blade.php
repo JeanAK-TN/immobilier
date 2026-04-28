@@ -52,7 +52,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="type" :value="__('Type')" />
-                        <select id="type" name="type" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="type" name="type" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les types') }}</option>
                             @foreach ($typeOptions as $typeOption)
                                 <option value="{{ $typeOption->value }}" @selected($filtres['type'] === $typeOption->value)>
@@ -64,7 +64,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="statut" :value="__('Statut')" />
-                        <select id="statut" name="statut" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="statut" name="statut" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les statuts') }}</option>
                             @foreach ($statutOptions as $statutOption)
                                 <option value="{{ $statutOption->value }}" @selected($filtres['statut'] === $statutOption->value)>
@@ -76,7 +76,7 @@
 
                     <div class="grid gap-2">
                         <x-input-label for="occupation" :value="__('Occupation')" />
-                        <select id="occupation" name="occupation" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="occupation" name="occupation" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Toutes') }}</option>
                             <option value="disponible" @selected($filtres['occupation'] === 'disponible')>{{ __('Disponible') }}</option>
                             <option value="occupe" @selected($filtres['occupation'] === 'occupe')>{{ __('Occupé') }}</option>

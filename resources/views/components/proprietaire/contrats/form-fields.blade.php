@@ -12,7 +12,7 @@
             <select
                 id="bien_id"
                 name="bien_id"
-                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
                 required
             >
                 <option value="">{{ __('Sélectionner un bien') }}</option>
@@ -30,7 +30,7 @@
             <select
                 id="locataire_id"
                 name="locataire_id"
-                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
                 required
             >
                 <option value="">{{ __('Sélectionner un locataire') }}</option>
@@ -90,7 +90,7 @@
             <select
                 id="statut"
                 name="statut"
-                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
                 required
             >
                 @foreach ($statutOptions as $statutOption)
@@ -154,7 +154,7 @@
                     type="checkbox"
                     name="reconduction_auto"
                     value="1"
-                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    class="rounded border-gray-300 text-gray-900 shadow-sm focus:ring-gray-500"
                     @checked(old('reconduction_auto', $contrat->reconduction_auto))
                 >
                 {{ __('Reconduction automatique') }}

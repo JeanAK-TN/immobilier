@@ -24,7 +24,7 @@
             <select
                 id="type"
                 name="type"
-                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
                 required
             >
                 <option value="">{{ __('Choisir un type') }}</option>
@@ -88,7 +88,7 @@
             id="description"
             name="description"
             rows="5"
-            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+            class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
         >{{ old('description', $bien->description) }}</textarea>
         <x-input-error :messages="$errors->get('description')" />
     </div>
@@ -105,7 +105,7 @@
         <select
             id="statut"
             name="statut"
-            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+            class="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
             required
         >
             @foreach ($statutOptions as $statutOption)

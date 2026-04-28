@@ -117,7 +117,7 @@
                                     <select
                                         id="mode"
                                         name="mode"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                         x-model="mode"
                                     >
                                         @foreach ($modeOptions as $modeOption)
@@ -132,7 +132,7 @@
                                     <select
                                         id="operateur_mobile_money"
                                         name="operateur_mobile_money"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                     >
                                         <option value="">{{ __('Choisir un opérateur') }}</option>
                                         @foreach ($operateurOptions as $operateurOption)
@@ -167,11 +167,11 @@
 
                             <dl class="mt-4 grid gap-3 text-sm">
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Périodicité') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Périodicité') }}</dt>
                                     <dd class="mt-1 text-gray-700">{{ __('Mensuel, autour du :jour', ['jour' => $contrat->jour_paiement]) }}</dd>
                                 </div>
                                 <div>
-                                    <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Montant conseillé') }}</dt>
+                                    <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Montant conseillé') }}</dt>
                                     <dd class="mt-1 font-semibold text-gray-900"><x-money :amount="$contrat->montantTotalMensuel()" /></dd>
                                 </div>
                             </dl>

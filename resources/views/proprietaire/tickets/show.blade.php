@@ -38,7 +38,7 @@
 
                     {{-- Description --}}
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Description') }}</p>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Description') }}</p>
                         <p class="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-700">{{ $ticket->description }}</p>
 
                         @if ($ticket->piecesJointes->isNotEmpty())
@@ -56,21 +56,21 @@
                     {{-- Métadonnées --}}
                     <dl class="grid gap-4 border-t border-gray-100 pt-4 text-sm lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Bien') }}</dt>
                             <dd class="mt-1 font-semibold text-gray-900">{{ $ticket->contrat->bien->nom }}</dd>
                             <dd class="text-xs text-gray-500">{{ $ticket->contrat->bien->adresse }}, {{ $ticket->contrat->bien->ville }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</dt>
                             <dd class="mt-1 font-medium text-gray-900">{{ $ticket->contrat->locataire->nomComplet() }}</dd>
                             <dd class="text-xs text-gray-500">{{ $ticket->contrat->locataire->email }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Créé le') }}</dt>
                             <dd class="mt-1 text-gray-700">{{ $ticket->created_at->translatedFormat('d F Y à H:i') }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Mis à jour') }}</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Mis à jour') }}</dt>
                             <dd class="mt-1 text-gray-700">{{ $ticket->updated_at->translatedFormat('d F Y à H:i') }}</dd>
                         </div>
                     </dl>
@@ -140,7 +140,7 @@
                                         id="message"
                                         name="message"
                                         rows="3"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500"
                                         placeholder="{{ __('Écrivez votre réponse ou note interne…') }}"
                                         required
                                     >{{ old('message') }}</textarea>
@@ -150,7 +150,7 @@
                                 <div class="flex flex-wrap items-center gap-4">
                                     <x-primary-button>{{ __('Envoyer') }}</x-primary-button>
                                     <label class="flex items-center gap-2 text-sm text-gray-600">
-                                        <input type="checkbox" name="est_note_interne" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" @checked(old('est_note_interne')) />
+                                        <input type="checkbox" name="est_note_interne" value="1" class="rounded border-gray-300 text-gray-900 shadow-sm focus:ring-gray-500" @checked(old('est_note_interne')) />
                                         <span>{{ __('Note interne (non visible par le locataire)') }}</span>
                                     </label>
                                 </div>
@@ -175,7 +175,7 @@
 
                                 <div>
                                     <x-input-label for="statut" :value="__('Changer le statut')" />
-                                    <select id="statut" name="statut" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <select id="statut" name="statut" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                                         @foreach ($statutOptions as $statutOption)
                                             <option value="{{ $statutOption->value }}" @selected(old('statut', $ticket->statut->value) === $statutOption->value)>
                                                 {{ $statutOption->label() }}
@@ -196,19 +196,19 @@
                         <h3 class="text-sm font-semibold text-gray-900">{{ __('Récapitulatif') }}</h3>
                         <dl class="mt-4 grid gap-3 text-sm">
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Statut actuel') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Statut actuel') }}</dt>
                                 <dd class="mt-1 flex"><x-tickets.status-badge :status="$ticket->statut" /></dd>
                             </div>
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Priorité') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Priorité') }}</dt>
                                 <dd class="mt-1 flex"><x-tickets.priority-badge :priority="$ticket->priorite" /></dd>
                             </div>
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Catégorie') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Catégorie') }}</dt>
                                 <dd class="mt-1 text-gray-700">{{ $ticket->categorie->label() }}</dd>
                             </div>
                             <div>
-                                <dt class="text-xs font-medium uppercase tracking-wider text-gray-400">{{ __('Messages') }}</dt>
+                                <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Messages') }}</dt>
                                 <dd class="mt-1 text-gray-700">{{ $ticket->messages->count() }}</dd>
                             </div>
                         </dl>

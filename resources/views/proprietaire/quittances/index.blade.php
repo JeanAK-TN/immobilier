@@ -23,7 +23,7 @@
                 >
                     <div class="grid gap-2">
                         <x-input-label for="contrat_id" :value="__('Contrat')" />
-                        <select id="contrat_id" name="contrat_id" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="contrat_id" name="contrat_id" class="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
                             <option value="">{{ __('Tous les contrats') }}</option>
                             @foreach ($contrats as $contrat)
                                 <option value="{{ $contrat->id }}" @selected($filtres['contratId'] === (string) $contrat->id)>

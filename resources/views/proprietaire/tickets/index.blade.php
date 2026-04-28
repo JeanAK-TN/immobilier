@@ -75,28 +75,28 @@
                             />
                         </div>
 
-                        <select name="priorite" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
+                        <select name="priorite" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-gray-500 focus:ring-gray-500 py-2">
                             <option value="">{{ __('Toutes les priorités') }}</option>
                             @foreach ($prioriteOptions as $opt)
                                 <option value="{{ $opt->value }}" @selected($filtres['priorite'] === $opt->value)>{{ $opt->label() }}</option>
                             @endforeach
                         </select>
 
-                        <select name="categorie" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
+                        <select name="categorie" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-gray-500 focus:ring-gray-500 py-2">
                             <option value="">{{ __('Toutes les catégories') }}</option>
                             @foreach ($categorieOptions as $opt)
                                 <option value="{{ $opt->value }}" @selected($filtres['categorie'] === $opt->value)>{{ $opt->label() }}</option>
                             @endforeach
                         </select>
 
-                        <select name="bien_id" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
+                        <select name="bien_id" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-gray-500 focus:ring-gray-500 py-2">
                             <option value="">{{ __('Tous les biens') }}</option>
                             @foreach ($biens as $bien)
                                 <option value="{{ $bien->id }}" @selected($filtres['bienId'] === (string) $bien->id)>{{ $bien->nom }}</option>
                             @endforeach
                         </select>
 
-                        <select name="locataire_id" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
+                        <select name="locataire_id" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-gray-500 focus:ring-gray-500 py-2">
                             <option value="">{{ __('Tous les locataires') }}</option>
                             @foreach ($locataires as $locataire)
                                 <option value="{{ $locataire->id }}" @selected($filtres['locataireId'] === (string) $locataire->id)>{{ $locataire->nomComplet() }}</option>
@@ -106,7 +106,10 @@
                         <button type="submit" class="hidden" tabindex="-1" aria-hidden="true">{{ __('Filtrer') }}</button>
 
                         @if (array_filter([$filtres['recherche'], $filtres['statut'], $filtres['priorite'], $filtres['categorie'], $filtres['bienId'], $filtres['locataireId']]))
-                            <a href="{{ route('proprietaire.tickets.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
+                            <a
+                                href="{{ route('proprietaire.tickets.index') }}"
+                                class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition hover:bg-gray-50"
+                            >
                                 {{ __('Réinitialiser') }}
                             </a>
                         @endif
@@ -115,22 +118,22 @@
             </section>
 
             @if ($tickets->isEmpty())
-                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
-                    <p class="text-3xl text-gray-200">🔧</p>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket') }}</h3>
+                <section class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
+                    <p class="text-4xl text-gray-300">🔧</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket trouvé') }}</h3>
                     <p class="mt-2 text-sm text-gray-500">{{ __('Ajustez vos filtres ou attendez la prochaine demande d\'un locataire.') }}</p>
-                </div>
+                </section>
             @else
                 {{-- Table --}}
                 <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
                     <table class="w-full text-sm">
-                        <thead class="border-b border-gray-100 bg-slate-50">
+                        <thead class="border-b border-gray-100 bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Ticket') }}</th>
-                                <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</th>
-                                <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 lg:table-cell">{{ __('Bien') }}</th>
-                                <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Statut') }}</th>
-                                <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 sm:table-cell">{{ __('Activité') }}</th>
+                                <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Ticket') }}</th>
+                                <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Locataire') }}</th>
+                                <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 lg:table-cell">{{ __('Bien') }}</th>
+                                <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{{ __('Statut') }}</th>
+                                <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 sm:table-cell">{{ __('Activité') }}</th>
                                 <th class="px-6 py-3.5"></th>
                             </tr>
                         </thead>
