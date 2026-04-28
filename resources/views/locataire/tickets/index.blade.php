@@ -1,25 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-                <h2 class="text-xl font-semibold leading-tight text-gray-900">{{ __('Tickets de maintenance') }}</h2>
-                <p class="mt-1 text-sm text-gray-500">{{ __('Signalez un incident, suivez son statut et échangez avec votre propriétaire.') }}</p>
-            </div>
-            @if ($contratActif)
-                <button
-                    type="button"
-                    x-on:click="createOpen = !createOpen"
-                    class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 self-start sm:self-auto"
-                >
-                    <span x-text="createOpen ? '✕ Annuler' : '+ Nouveau ticket'"></span>
-                </button>
-            @endif
+        <div>
+            <h2 class="text-xl font-semibold leading-tight text-gray-900">{{ __('Tickets de maintenance') }}</h2>
+            <p class="mt-1 text-sm text-gray-500">{{ __('Signalez un incident, suivez son statut et échangez avec votre propriétaire.') }}</p>
         </div>
     </x-slot>
 
     <div
         class="py-8"
-        x-data="{ createOpen: {{ ($tickets->isEmpty() && $contratActif) ? 'true' : 'false' }} }"
+        x-data="{ createOpen: {{ ($ticketsTotalContratCount === 0 && $contratActif) ? 'true' : 'false' }} }"
     >
         <div class="mx-auto max-w-4xl space-y-5 px-4 sm:px-6 lg:px-8">
 
@@ -29,27 +18,37 @@
                 </div>
             @endif
 
-            {{-- Contrat actif --}}
+            {{-- Contrat actif + bouton Nouveau ticket --}}
             @if ($contratActif)
-                <div class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50">
-                        <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                        </svg>
-                    </span>
-                    <div class="min-w-0 flex-1">
-                        <p class="truncate text-sm font-semibold text-gray-900">{{ $contratActif->bien->nom }}</p>
-                        <p class="truncate text-xs text-gray-400">{{ $contratActif->bien->adresse }}, {{ $contratActif->bien->ville }}</p>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:flex-1">
+                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                            <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold text-gray-900">{{ $contratActif->bien->nom }}</p>
+                            <p class="truncate text-xs text-gray-400">{{ $contratActif->bien->adresse }}, {{ $contratActif->bien->ville }}</p>
+                        </div>
+                        @if ($ticketsActifsContratCount > 0)
+                            <span class="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                                {{ $ticketsActifsContratCount }} actif{{ $ticketsActifsContratCount > 1 ? 's' : '' }}
+                            </span>
+                        @else
+                            <span class="shrink-0 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                                {{ __('Aucun incident actif') }}
+                            </span>
+                        @endif
                     </div>
-                    @if ($ticketsActifsContratCount > 0)
-                        <span class="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
-                            {{ $ticketsActifsContratCount }} actif{{ $ticketsActifsContratCount > 1 ? 's' : '' }}
-                        </span>
-                    @else
-                        <span class="shrink-0 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-                            {{ __('Aucun incident actif') }}
-                        </span>
-                    @endif
+
+                    <button
+                        type="button"
+                        x-on:click="createOpen = !createOpen"
+                        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700"
+                    >
+                        <span x-text="createOpen ? '✕ Annuler' : '+ Nouveau ticket'"></span>
+                    </button>
                 </div>
             @endif
 

@@ -28,6 +28,7 @@ class TicketMaintenanceController extends Controller
         $statut = trim((string) $request->query('statut', ''));
         $contratActif = $request->user()?->locataire?->contratActif()?->load('bien');
         $ticketsActifsContratCount = $contratActif?->tickets()->actif()->count() ?? 0;
+        $ticketsTotalContratCount = $contratActif?->tickets()->count() ?? 0;
 
         $tickets = TicketMaintenance::query()
             ->pourLocataire($request->user())
@@ -45,6 +46,7 @@ class TicketMaintenanceController extends Controller
         return view('locataire.tickets.index', [
             'contratActif' => $contratActif,
             'ticketsActifsContratCount' => $ticketsActifsContratCount,
+            'ticketsTotalContratCount' => $ticketsTotalContratCount,
             'tickets' => $tickets,
             'categorieOptions' => CategorieTicket::cases(),
             'prioriteOptions' => PrioriteTicket::cases(),
