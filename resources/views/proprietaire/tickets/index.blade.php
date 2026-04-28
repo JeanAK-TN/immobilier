@@ -16,9 +16,48 @@
     <div class="py-8">
         <div class="mx-auto max-w-7xl space-y-5 px-4 sm:px-6 lg:px-8">
 
-            {{-- Filtres compacts --}}
+            @php
+                $autresFiltres = array_filter([
+                    'recherche' => $filtres['recherche'],
+                    'priorite' => $filtres['priorite'],
+                    'categorie' => $filtres['categorie'],
+                    'bien_id' => $filtres['bienId'],
+                    'locataire_id' => $filtres['locataireId'],
+                ]);
+            @endphp
+
+            {{-- Onglets statut --}}
+            <div class="flex flex-wrap gap-1.5">
+                <a
+                    href="{{ route('proprietaire.tickets.index', $autresFiltres) }}"
+                    @class([
+                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                        'bg-gray-900 text-white' => $filtres['statut'] === '',
+                        'bg-gray-100 text-gray-600 hover:bg-gray-200' => $filtres['statut'] !== '',
+                    ])
+                >{{ __('Tous') }}
+                    @if ($tickets->total() > 0 && $filtres['statut'] === '')
+                        <span class="ml-1 opacity-60">{{ $tickets->total() }}</span>
+                    @endif
+                </a>
+                @foreach ($statutOptions as $opt)
+                    <a
+                        href="{{ route('proprietaire.tickets.index', array_merge($autresFiltres, ['statut' => $opt->value])) }}"
+                        @class([
+                            'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                            'bg-gray-900 text-white' => $filtres['statut'] === $opt->value,
+                            'bg-gray-100 text-gray-600 hover:bg-gray-200' => $filtres['statut'] !== $opt->value,
+                        ])
+                    >{{ $opt->label() }}</a>
+                @endforeach
+            </div>
+
+            {{-- Filtres complémentaires --}}
             <section class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                 <form method="GET" action="{{ route('proprietaire.tickets.index') }}">
+                    @if ($filtres['statut'])
+                        <input type="hidden" name="statut" value="{{ $filtres['statut'] }}">
+                    @endif
                     <div class="flex flex-wrap items-end gap-3">
                         <div class="flex-1 min-w-48">
                             <x-text-input
@@ -29,13 +68,6 @@
                                 placeholder="{{ __('Titre, locataire, bien…') }}"
                             />
                         </div>
-
-                        <select name="statut" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
-                            <option value="">{{ __('Tous les statuts') }}</option>
-                            @foreach ($statutOptions as $opt)
-                                <option value="{{ $opt->value }}" @selected($filtres['statut'] === $opt->value)>{{ $opt->label() }}</option>
-                            @endforeach
-                        </select>
 
                         <select name="priorite" class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2">
                             <option value="">{{ __('Toutes les priorités') }}</option>
@@ -77,11 +109,11 @@
             </section>
 
             @if ($tickets->isEmpty())
-                <section class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
-                    <p class="text-4xl text-gray-200">🔧</p>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket trouvé') }}</h3>
+                <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center shadow-sm">
+                    <p class="text-3xl text-gray-200">🔧</p>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ __('Aucun ticket') }}</h3>
                     <p class="mt-2 text-sm text-gray-500">{{ __('Ajustez vos filtres ou attendez la prochaine demande d\'un locataire.') }}</p>
-                </section>
+                </div>
             @else
                 {{-- Table --}}
                 <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
@@ -91,7 +123,6 @@
                                 <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Ticket') }}</th>
                                 <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Locataire') }}</th>
                                 <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 lg:table-cell">{{ __('Bien') }}</th>
-                                <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Priorité') }}</th>
                                 <th class="px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Statut') }}</th>
                                 <th class="hidden px-4 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 sm:table-cell">{{ __('Activité') }}</th>
                                 <th class="px-6 py-3.5"></th>
@@ -99,31 +130,36 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             @foreach ($tickets as $ticket)
-                                <tr @class([
-                                    'group transition-colors hover:bg-slate-50',
-                                    'bg-red-50/50' => $ticket->priorite->value === 'haute',
-                                ])>
+                                <tr
+                                    onclick="window.location='{{ route('proprietaire.tickets.show', $ticket) }}'"
+                                    class="group cursor-pointer transition-colors hover:bg-slate-50"
+                                >
                                     <td class="px-6 py-4">
-                                        <p class="font-medium text-gray-900">{{ $ticket->titre }}</p>
-                                        <p class="mt-0.5 text-xs text-gray-400">{{ $ticket->categorie->label() }}
-                                            @if ($ticket->messages_count > 0)
-                                                · {{ $ticket->messages_count }} msg
-                                            @endif
-                                        </p>
+                                        <div class="flex items-center gap-3">
+                                            <span @class([
+                                                'shrink-0 h-2 w-2 rounded-full',
+                                                'bg-red-400' => $ticket->priorite->value === 'haute',
+                                                'bg-amber-400' => $ticket->priorite->value === 'moyenne',
+                                                'bg-gray-300' => $ticket->priorite->value === 'basse',
+                                            ])></span>
+                                            <div class="min-w-0">
+                                                <p class="truncate font-medium text-gray-900">{{ $ticket->titre }}</p>
+                                                <p class="mt-0.5 text-xs text-gray-400">{{ $ticket->categorie->label() }}
+                                                    @if ($ticket->messages_count > 0)
+                                                        · {{ $ticket->messages_count }} msg
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="px-4 py-4 text-gray-700">{{ $ticket->contrat->locataire->nomComplet() }}</td>
                                     <td class="hidden px-4 py-4 text-gray-500 lg:table-cell">{{ $ticket->contrat->bien->nom }}</td>
-                                    <td class="px-4 py-4"><x-tickets.priority-badge :priority="$ticket->priorite" /></td>
                                     <td class="px-4 py-4"><x-tickets.status-badge :status="$ticket->statut" /></td>
                                     <td class="hidden px-4 py-4 text-xs text-gray-400 sm:table-cell">{{ $ticket->updated_at->diffForHumans() }}</td>
                                     <td class="px-6 py-4 text-right">
-                                        <a
-                                            href="{{ route('proprietaire.tickets.show', $ticket) }}"
-                                            class="inline-flex items-center gap-1 text-sm font-semibold text-gray-700 transition hover:text-gray-900"
-                                        >
-                                            {{ __('Traiter') }}
-                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                                        </a>
+                                        <svg class="ml-auto h-4 w-4 text-gray-300 transition group-hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
                                     </td>
                                 </tr>
                             @endforeach
