@@ -15,26 +15,85 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="flex min-h-screen flex-col bg-slate-50">
-            @include('layouts.navigation')
+        @auth
+            @if (Auth::user()->isProprietaire())
+                <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-50">
+                    {{-- Overlay mobile --}}
+                    <div x-show="sidebarOpen"
+                         x-transition.opacity
+                         @click="sidebarOpen = false"
+                         class="fixed inset-0 z-30 bg-gray-900/40 lg:hidden"
+                         style="display: none;"></div>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white border-b border-slate-200">
-                    <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                    @include('layouts.sidebar-proprietaire')
+
+                    <div class="flex min-h-screen flex-col lg:pl-64">
+                        {{-- Topbar --}}
+                        <header class="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:px-6 lg:px-8">
+                            <button @click="sidebarOpen = true"
+                                    class="-ml-2 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+
+                            @isset($header)
+                                <div class="min-w-0 flex-1">
+                                    {{ $header }}
+                                </div>
+                            @endisset
+                        </header>
+
+                        <main class="flex-1">
+                            {{ $slot }}
+                        </main>
+
+                        <footer class="border-t border-slate-200 bg-white py-4 text-center text-xs text-gray-400">
+                            &copy; 2026 Jean Amassongon KODIO, Lomé Business School
+                        </footer>
                     </div>
-                </header>
-            @endisset
+                </div>
+            @else
+                <div class="flex min-h-screen flex-col bg-slate-50">
+                    @include('layouts.navigation')
 
-            <!-- Page Content -->
-            <main class="flex-1">
-                {{ $slot }}
-            </main>
+                    @isset($header)
+                        <header class="bg-white border-b border-slate-200">
+                            <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                                {{ $header }}
+                            </div>
+                        </header>
+                    @endisset
 
-            <footer class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-gray-400">
-                &copy; 2026 Jean Amassongon KODIO, Lomé Business School
-            </footer>
-        </div>
+                    <main class="flex-1">
+                        {{ $slot }}
+                    </main>
+
+                    <footer class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-gray-400">
+                        &copy; 2026 Jean Amassongon KODIO, Lomé Business School
+                    </footer>
+                </div>
+            @endif
+        @else
+            <div class="flex min-h-screen flex-col bg-slate-50">
+                @include('layouts.navigation')
+
+                @isset($header)
+                    <header class="bg-white border-b border-slate-200">
+                        <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endisset
+
+                <main class="flex-1">
+                    {{ $slot }}
+                </main>
+
+                <footer class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-gray-400">
+                    &copy; 2026 Jean Amassongon KODIO, Lomé Business School
+                </footer>
+            </div>
+        @endauth
     </body>
 </html>

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Enums\StatutContrat;
+use App\Models\Contrat;
 use App\Models\TicketMaintenance;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -20,11 +22,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configurerRateLimiters();
 
-        View::composer('layouts.navigation', function ($view): void {
+        View::composer(['layouts.navigation', 'layouts.sidebar-proprietaire'], function ($view): void {
             $user = auth()->user();
 
             if (! $user) {
-                $view->with('ticketsActifsCount', 0);
+                $view->with('ticketsActifsCount', 0)
+                    ->with('contratsEnAttenteCount', 0);
 
                 return;
             }
@@ -33,7 +36,12 @@ class AppServiceProvider extends ServiceProvider
                 ? TicketMaintenance::query()->pourProprietaire($user)->actif()->count()
                 : TicketMaintenance::query()->pourLocataire($user)->actif()->count();
 
-            $view->with('ticketsActifsCount', $ticketsActifsCount);
+            $contratsEnAttenteCount = $user->isProprietaire()
+                ? Contrat::query()->pourProprietaire($user)->where('statut', StatutContrat::EnAttente)->count()
+                : 0;
+
+            $view->with('ticketsActifsCount', $ticketsActifsCount)
+                ->with('contratsEnAttenteCount', $contratsEnAttenteCount);
         });
     }
 

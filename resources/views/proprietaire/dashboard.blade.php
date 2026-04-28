@@ -8,6 +8,21 @@
     <div class="py-8">
         <div class="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
 
+            {{-- En-tête de bienvenue --}}
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wider text-gray-400">
+                        {{ ucfirst(now()->translatedFormat('l d F Y')) }}
+                    </p>
+                    <h1 class="mt-1 text-2xl font-bold text-gray-900">
+                        {{ __('Bonjour,') }} {{ Str::before(Auth::user()->name, ' ') }}
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-500">
+                        {{ __('Voici un aperçu de votre activité locative.') }}
+                    </p>
+                </div>
+            </div>
+
             @if (session('status'))
                 <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3.5 text-sm font-medium text-green-800">
                     {{ session('status') }}
@@ -125,9 +140,9 @@
                     @endif
                 </section>
 
-                {{-- Accès rapide --}}
+                {{-- Actions rapides --}}
                 <aside class="flex flex-col gap-2.5">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Accès rapide') }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Créer') }}</p>
 
                     <a href="{{ route('proprietaire.biens.create') }}"
                        class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50">
@@ -147,21 +162,9 @@
                         {{ __('Nouveau contrat') }}
                     </a>
 
-                    <a href="{{ route('proprietaire.biens.index') }}"
-                       class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50">
-                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 text-base">↗</span>
-                        {{ __('Mes biens') }}
-                    </a>
-
-                    <a href="{{ route('proprietaire.tickets.index') }}"
-                       class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50">
-                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 text-base">↗</span>
-                        {{ __('Tickets de maintenance') }}
-                    </a>
-
                     @if ($contratsEnAttente > 0)
                         <a href="{{ route('proprietaire.contrats.index', ['statut' => 'en_attente']) }}"
-                           class="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-100">
+                           class="mt-2 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-100">
                             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600 font-bold">!</span>
                             {{ $contratsEnAttente }} contrat{{ $contratsEnAttente > 1 ? 's' : '' }} à signer
                         </a>
